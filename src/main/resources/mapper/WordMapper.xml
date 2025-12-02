@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.WordMapper">
+
+
+<!--
+    word テーブルの1行を Word クラスにマッピングする resultMap。
+    type には対応するドメインクラスの FQCN を指定する。
+  -->
+  <resultMap id="WordResultMap" type="Word">
+    <!-- 主キー。column は DB のカラム名、property は Java 側のフィールド名 -->
+    <id     column="id"       property="id" />
+    <!-- 通常カラム。column と property を対応付ける -->
+    <result column="english"  property="english" />
+    <result column="japanese" property="japanese" />
+  </resultMap>
+
+  <!-- 主キーで1件取得 -->
+  <select id="findById" parameterType="long" resultMap="WordResultMap">
+    SELECT
+      id,
+      english,
+      japanese
+    FROM
+      word
+    WHERE
+      id = #{id}
+  </select>
+
+  <!-- 全件取得（ページネーションは別途） -->
+  <select id="findAll" resultMap="WordResultMap">
+    SELECT
+      id,
+      english,
+      japanese
+    FROM
+      word
+    ORDER BY
+      id
+  </select>
+
+  <!-- 新規登録。id は AUTO_INCREMENT に任せる想定 -->
+  <insert id="insert" parameterType="Word" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO word (
+      english,
+      japanese
+    ) VALUES (
+      #{english},
+      #{japanese}
+    )
+  </insert>
+
+  <!-- 更新。id で1件を特定して、他のカラムを更新 -->
+  <update id="update" parameterType="Word">
+    UPDATE word
+    SET
+      english  = #{english},
+      japanese = #{japanese}
+    WHERE
+      id = #{id}
+  </update>
+
+  <!-- 主キーで1件削除 -->
+  <delete id="deleteById" parameterType="long">
+    DELETE FROM word
+    WHERE id = #{id}
+  </delete>
+
+
+</mapper>

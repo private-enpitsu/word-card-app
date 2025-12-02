@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>単語一覧（管理者用）</title>
+
+  <!--
+    必要であれば、既存プロジェクトの CSS や Bootstrap を読み込む。
+    例）<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    今は最低限の動作確認が目的なので、必須ではない。
+  -->
+</head>
+<body>
+  <h1>単語一覧（管理者用）</h1>
+  
+  <!-- 新規登録画面へのリンク -->
+  <p>
+    <a th:href="@{/admin/words/new}">新規登録</a>
+  </p>
+  
+  <!-- 取得件数の簡単な表示。wordList のサイズをそのまま出す。 -->
+  <p th:text="'登録件数: ' + ${#lists.size(wordList)} + ' 件'">登録件数: 0 件</p>
+
+  <!-- 単語一覧テーブル -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>英単語</th>
+        <th>日本語</th>
+		<th>操作</th> <!-- 編集ボタン用の列 -->
+      </tr>
+    </thead>
+    <tbody>
+      <!--
+        wordList は AdminWordController で Model に詰めたリスト。
+        th:each で 1件ずつ取り出して表示する。
+      -->
+      <tr th:each="word : ${wordList}">
+        <!-- Word.id フィールドの値 -->
+        <td th:text="${word.id}">1</td>
+        <!-- Word.english フィールドの値 -->
+        <td th:text="${word.english}">apple</td>
+        <!-- Word.japanese フィールドの値 -->
+        <td th:text="${word.japanese}">りんご</td>
+		
+		<td>
+			<!-- 編集画面へのリンク（/admin/words/{id}/edit） -->
+			<a th:href="@{'/admin/words/' + ${word.id} + '/edit'}">編集</a>
+			
+			<!-- 削除処理へのリンク（/admin/words/{id}/delete） -->
+			|
+			<a th:href="@{'/admin/words/' + ${word.id} + '/delete'}"
+			   onclick="return confirm('本当に削除してよろしいですか？');">
+			  削除
+			</a>
+			
+		</td>
+		
+		
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 今後、ここに「新規登録ボタン」や「検索フォーム」などを追加していく予定 -->
+</body>
+</html>

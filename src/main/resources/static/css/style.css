@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+body, h2 {
+  font-family: "メイリオ", sans-serif;
+}
+
+.navbar svg {
+  position: relative;
+  bottom: 2px;
+}
+
+.list-table {
+  max-width: 500px;
+}
+
+.detail-table {
+  table-layout: fixed;
+  max-width: 500px;
+}
+
+.detail-table th {
+  width: 100px;
+}
+
+.detail-table .note {
+  font-family: "メイリオ", sans-serif;
+  font-size: 1rem;
+  margin-bottom: 0;
+}

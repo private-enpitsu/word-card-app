@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>単語 新規登録（管理者用）</title>
+</head>
+<body>
+	<!-- word.id が null なら「新規」、それ以外なら「編集」と表示する -->
+	<h1 th:text="${word.id} == null ? '単語 新規登録（管理者用）' : '単語 編集（管理者用）'">
+		単語 新規登録（管理者用）
+	</h1>
+
+  <!--
+    th:object で "word" オブジェクト（AdminWordController から渡される）をフォームの対象にする。
+    th:field="*{プロパティ名}" で、Word クラスのフィールドと入力項目を結びつける。
+  -->
+  <!--
+    word.id が null の場合: 新規登録 → POST /admin/words
+    word.id が null でない場合: 編集 → POST /admin/words/{id}
+  -->
+  <form th:action="${word.id} == null ? @{/admin/words} : @{/admin/words/{id}(id=${word.id})}" th:object="${word}" method="post">
+	
+    <!-- 英単語の入力欄 -->
+    <div>
+      <label for="english">英単語：</label>
+      <!-- Word.english フィールドに対応 -->
+      <input type="text" id="english" th:field="*{english}" />
+    </div>
+
+	<!-- 英単語に関するエラーメッセージを表示 --><!-- バリデーションエラー時のメッセージ（例：英単語は必須です）がここに入る -->
+	<div th:if="${#fields.hasErrors('english')}" th:errors="*{english}" style="color: red;"></div>
+
+    <!-- 日本語の入力欄 -->
+    <div>
+      <label for="japanese">日本語：</label>
+      <!-- Word.japanese フィールドに対応 -->
+      <input type="text" id="japanese" th:field="*{japanese}" />
+    </div>
+
+	<!-- 日本語に関するエラーメッセージを表示 --><!-- 例：日本語は必須です -->
+	<div th:if="${#fields.hasErrors('japanese')}" th:errors="*{japanese}" style="color: red;"></div>
+
+	
+    <!-- 送信ボタン -->
+    <div>
+      <button type="submit">登録</button>
+    </div>
+  </form>
+
+  <!-- 一覧画面への戻りリンク -->
+  <p>
+    <a th:href="@{/admin/words}">一覧に戻る</a>
+  </p>
+</body>
+</html>
