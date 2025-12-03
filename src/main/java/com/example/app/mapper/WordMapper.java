@@ -3,6 +3,7 @@ package com.example.app.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.app.domain.Word;
 
@@ -56,4 +57,32 @@ public interface WordMapper {
 	int deleteById(Long id);
 		
 
+	
+	
+    /**
+     * ページネーション用。全件数を取得する。
+     * @return word テーブルの全レコード件数
+     */
+	int countAll();
+	
+    /**
+     * ページネーション用: offset/limit でデータを取得する。
+     * @param offset 先頭から何件スキップするか（0, 10, 20, ...）
+     * @param limit  取得件数（1ページあたりの件数）
+     * @return 指定範囲の Word リスト
+     */
+	List<Word> findPage(
+			@Param("offset") int offset,
+			@Param("limit") int limit			
+			);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

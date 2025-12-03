@@ -55,6 +55,41 @@ public class WordService {
 	
 	
 	
+	
+    /**
+     * 全レコード件数を取得する（ページネーション用）。
+     * @return word テーブルの全件数
+     */
+	public int countAll() {
+		return wordMapper.countAll();
+	}
+	
+    /**
+     * 指定ページのデータを取得する（ページネーション用）。
+     *
+     * @param page 1 始まりのページ番号（1ページ目=1）
+     * @param size 1ページあたりの件数
+     * @return 指定ページに表示する Word のリスト
+     */
+	public List<Word> findPage(int page, int size){
+		
+		
+		// ページ番号が 1 未満の場合は 1 に矯正する
+		if(page < 1) {
+			page = 1;
+		}
+		
+		// 先頭から何件スキップするかを計算 (0, size, 2*size, ...)
+		int offset = (page - 1) * size;
+		
+		// Mapper に offset/limit 指定で取得を依頼
+		return wordMapper.findPage(offset, size);
+		
+		
+	}
+	
+	
+	
     /**
      * 単語を新規登録する。
      * @param word  登録したい単語（id は null を想定）

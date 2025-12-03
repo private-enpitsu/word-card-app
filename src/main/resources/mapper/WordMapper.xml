@@ -67,4 +67,33 @@
   </delete>
 
 
+
+
+
+  <!-- （ページネーション用）全件数を取得 -->
+  <select id="countAll" resultType="int">
+    SELECT
+      COUNT(*)
+    FROM
+      word
+  </select>
+  
+    <!-- （ページネーション用）: offset/limit でデータを取得 -->
+  <select id="findPage" resultMap="WordResultMap">
+    SELECT
+      id,
+      english,
+      japanese
+    FROM
+      word
+    ORDER BY
+      id
+    <!-- MySQL 形式の LIMIT offset, limit -->
+    LIMIT #{offset}, #{limit}
+  </select>
+  
+  
+  
+  
+
 </mapper>

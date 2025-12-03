@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.domain.Word;
 import com.example.app.service.WordService;
@@ -48,16 +49,71 @@ public class AdminWordController {
      *
      * @param model 画面に値を渡すための入れ物
      * @return 表示するテンプレートの論理名
+     * 
+     * ●ページネーション付きに編集
      */
 	@GetMapping("/admin/words")
-	public String showWordList(Model model) {
+	public String showWordList(
+			@RequestParam(name = "page", defaultValue = "1") Integer page,
+			Model model) {
 		
-		List<Word> wordList = wordService.findAll();	// DB から単語の全件を取得（現時点では絞り込みなし）
 		
-		model.addAttribute("wordList", wordList);	// テンプレートに渡すため、Model に格納
+		// 1ページあたりの表示件数（必要に応じて変更可）
+		int pageSize = 100;
+		
+		// 全件数を取得
+		int totalCount = wordService.countAll();
+		
+		// 総ページ数を計算（0件のときは 1 ページとして扱う）
+		int totalPages;
+		
+		if(totalCount == 0) {
+			totalPages = 1;
+			page = 1;
+		} else {
+			// 切り上げ割り算: (totalCount + pageSize - 1) / pageSize
+            totalPages = (totalCount + pageSize - 1) / pageSize;
+            
+            // page が範囲外なら補正（1〜totalPages の範囲に収める）
+            if (page < 1) {
+                page = 1;
+            } else if (page > totalPages) {
+                page = totalPages;
+            }
+		}
+		
+		// このページに表示するデータを取得
+		List<Word> wordList = wordService.findPage(page, pageSize);
+		
+        // テンプレートに渡す
+        model.addAttribute("wordList", wordList);    // 一覧データ
+        model.addAttribute("currentPage", page);     // 現在ページ
+        model.addAttribute("totalPages", totalPages);// 総ページ数
+        model.addAttribute("totalCount", totalCount);// 全件数
+		
+//		List<Word> wordList = wordService.findAll();	// DB から単語の全件を取得（現時点では絞り込みなし）
+		
+//		model.addAttribute("wordList", wordList);	// テンプレートに渡すため、Model に格納
 		
 		return "admin/word-list";	// src/main/resources/templates/admin/word-list.html を表示する
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -150,6 +206,22 @@ public class AdminWordController {
 		
 		return "redirect:/admin/words";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

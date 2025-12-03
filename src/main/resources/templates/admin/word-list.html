@@ -19,7 +19,11 @@
   </p>
   
   <!-- 取得件数の簡単な表示。wordList のサイズをそのまま出す。 -->
-  <p th:text="'登録件数: ' + ${#lists.size(wordList)} + ' 件'">登録件数: 0 件</p>
+<!--  <p th:text="'登録件数: ' + ${#lists.size(wordList)} + ' 件'">登録件数: 0 件</p>-->
+
+<!-- 登録件数の表示（全件数 totalCount を使う） -->
+<p th:text="'登録件数: ' + ${totalCount} + ' 件'">登録件数: 0 件</p>
+
 
   <!-- 単語一覧テーブル -->
   <table border="1">
@@ -63,5 +67,49 @@
   </table>
 
   <!-- 今後、ここに「新規登録ボタン」や「検索フォーム」などを追加していく予定 -->
+  
+  
+  <!-- ページネーション表示 -->
+  <div>
+    <!-- 「ページ X / Y （全 Z 件）」のような情報表示 -->
+    <p th:text="'ページ ' + ${currentPage} + ' / ' + ${totalPages} + ' （全 ' + ${totalCount} + ' 件）'">
+      ページ 1 / 1 （全 0 件）
+    </p>
+
+    <!-- 前へ・ページ番号・次へ -->
+    <div>
+      <!-- 前へ：1ページ目より後のときだけ表示 -->
+      <span th:if="${currentPage > 1}">
+        <a th:href="@{/admin/words(page=${currentPage - 1})}">前へ</a>
+      </span>
+
+      <!-- ページ番号の一覧（1〜totalPages） -->
+      <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+
+        <!-- 現在ページはリンクではなく強調表示 -->
+        <span th:if="${i == currentPage}"
+              th:text="${i}"
+              style="font-weight: bold;">
+          1
+        </span>
+
+        <!-- その他のページはリンクにする -->
+        <a th:if="${i != currentPage}"
+           th:href="@{/admin/words(page=${i})}"
+           th:text="${i}">
+          1
+        </a>
+
+        <span> </span>
+      </span>
+
+      <!-- 次へ：最後のページより前のときだけ表示 -->
+      <span th:if="${currentPage < totalPages}">
+        <a th:href="@{/admin/words(page=${currentPage + 1})}">次へ</a>
+      </span>
+    </div>
+  </div>
+  
+  
 </body>
 </html>
