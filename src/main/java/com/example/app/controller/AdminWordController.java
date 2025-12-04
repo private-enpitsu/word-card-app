@@ -51,18 +51,22 @@ public class AdminWordController {
      * @return 表示するテンプレートの論理名
      * 
      * ●ページネーション付きに編集
+     * 
+     * ●検索キーワード付きでの件数を取得する機能を追加。
+     * keyword が null/空白のみ の場合は全件数を返す。
      */
 	@GetMapping("/admin/words")
 	public String showWordList(
+			@RequestParam(name = "keyword", required = false) String keyword, //Null許可 keyword追加
 			@RequestParam(name = "page", defaultValue = "1") Integer page,
 			Model model) {
 		
 		
 		// 1ページあたりの表示件数（必要に応じて変更可）
-		int pageSize = 100;
+		int pageSize = 50;
 		
-		// 全件数を取得
-		int totalCount = wordService.countAll();
+		// キーワード条件での総件数を取得（keyword が空なら全件数）
+		int totalCount = wordService.countByKeyword(keyword);
 		
 		// 総ページ数を計算（0件のときは 1 ページとして扱う）
 		int totalPages;
@@ -71,7 +75,7 @@ public class AdminWordController {
 			totalPages = 1;
 			page = 1;
 		} else {
-			// 切り上げ割り算: (totalCount + pageSize - 1) / pageSize
+			// 切り上げ割り算:メソッドを使わず、計算で小数点の場合のページ数切り上げ
             totalPages = (totalCount + pageSize - 1) / pageSize;
             
             // page が範囲外なら補正（1〜totalPages の範囲に収める）
@@ -83,14 +87,15 @@ public class AdminWordController {
 		}
 		
 		// このページに表示するデータを取得
-		List<Word> wordList = wordService.findPage(page, pageSize);
+		List<Word> wordList = wordService.findPageByKeyword(keyword, page, pageSize);
 		
         // テンプレートに渡す
         model.addAttribute("wordList", wordList);    // 一覧データ
         model.addAttribute("currentPage", page);     // 現在ページ
         model.addAttribute("totalPages", totalPages);// 総ページ数
         model.addAttribute("totalCount", totalCount);// 全件数
-		
+        model.addAttribute("keyword", keyword);     // 検索キーワード（フォーム再表示用）
+        
 //		List<Word> wordList = wordService.findAll();	// DB から単語の全件を取得（現時点では絞り込みなし）
 		
 //		model.addAttribute("wordList", wordList);	// テンプレートに渡すため、Model に格納

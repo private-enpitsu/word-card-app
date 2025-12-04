@@ -59,6 +59,67 @@ public interface WordMapper {
 
 	
 	
+	
+	
+	
+	//	●クイズ用
+	
+	
+    /**
+     * クイズ用: ランダムに1件の単語を取得する。
+     * ORDER BY RAND() LIMIT 1 を使う簡易版。
+     *
+     * @return ランダムに選ばれた Word 1件
+     */
+	Word selectRandomWord();
+	
+	
+    /**
+     * クイズ用: 正解とは別の誤答候補（日本語）をランダムに複数取得する。
+     * - id で指定されたレコード以外から
+     * - japanese カラムだけを取り出す
+     * - LIMIT で指定件数分だけランダム取得
+     *
+     * @param id     正解の Word の id（この id の行は除外する）
+     * @param limit  欲しい誤答候補の件数（例: 3）
+     * @return 誤答候補の日本語リスト
+     */
+	List<String> selectRandomWrongAnswers(@Param("id") Long id,
+										@Param("limit") int limit
+										);
+	
+	
+	
+	
+	
+	
+	//	●ページネーション用
+	
+	
+    /**
+     * 検索付きのページネーション用: キーワード条件での件数を取得する。
+     * keyword が null または空文字の場合は、全件数を返す。
+     */
+	int countByKeyword(@Param("keyword") String keyword);
+	
+    /**
+     * 検索付きのページネーション用:
+     * キーワード条件＋offset/limit でデータを取得する。
+     * @param keyword 検索キーワード（null/空なら条件なし）
+     * @param offset  先頭から何件スキップするか（0, 10, 20, ...）
+     * @param limit   1ページあたりの件数
+     */
+	List<Word> findPageByKeyword(@Param("keyword") String keyword,
+								@Param("offset") int offset,
+								@Param("limit") int limit			
+								);
+	
+	
+	
+	
+	
+	
+	
     /**
      * ページネーション用。全件数を取得する。
      * @return word テーブルの全レコード件数
@@ -80,7 +141,7 @@ public interface WordMapper {
 	
 	
 	
-	
+
 	
 	
 	

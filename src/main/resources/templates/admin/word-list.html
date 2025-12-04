@@ -13,6 +13,18 @@
 <body>
   <h1>単語一覧（管理者用）</h1>
   
+  
+  <!-- 検索フォーム -->
+  <form th:action="@{/admin/words}" method="get">
+    <label for="keyword">キーワード検索：</label>
+    <input type="text" id="keyword" name="keyword"
+           th:value="${keyword}" />
+    <button type="submit">検索</button>
+    <!-- 全件表示に戻るリンク（keyword と page をクリア） -->
+    <a th:href="@{/admin/words}">クリア</a>
+  </form>
+  
+  
   <!-- 新規登録画面へのリンク -->
   <p>
     <a th:href="@{/admin/words/new}">新規登録</a>
@@ -80,7 +92,8 @@
     <div>
       <!-- 前へ：1ページ目より後のときだけ表示 -->
       <span th:if="${currentPage > 1}">
-        <a th:href="@{/admin/words(page=${currentPage - 1})}">前へ</a>
+<!--        <a th:href="@{/admin/words(page=${currentPage - 1})}">前へ</a>-->
+		<a th:href="@{/admin/words(page=${currentPage - 1}, keyword=${keyword})}">前へ</a>
       </span>
 
       <!-- ページ番号の一覧（1〜totalPages） -->
@@ -105,7 +118,8 @@
 
       <!-- 次へ：最後のページより前のときだけ表示 -->
       <span th:if="${currentPage < totalPages}">
-        <a th:href="@{/admin/words(page=${currentPage + 1})}">次へ</a>
+<!--        <a th:href="@{/admin/words(page=${currentPage + 1})}">次へ</a>-->
+		<a th:href="@{/admin/words(page=${currentPage + 1}, keyword=${keyword})}">次へ</a>
       </span>
     </div>
   </div>

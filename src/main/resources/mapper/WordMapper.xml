@@ -67,8 +67,41 @@
   </delete>
 
 
+  <!--●クイズ用-->
 
 
+  <!-- ★ クイズ用: ランダムに1件の単語を取得 -->
+  <select id="selectRandomWord" resultMap="WordResultMap">
+    SELECT
+      id,
+      english,
+      japanese
+    FROM
+      word
+    ORDER BY
+      RAND()
+    LIMIT 1
+  </select>
+
+  <!-- ★ クイズ用: 誤答候補の日本語をランダムに複数取得 -->
+  <select id="selectRandomWrongAnswers"
+          parameterType="map"
+          resultType="string">
+    SELECT
+      japanese
+    FROM
+      word
+    WHERE
+      id != #{id}              <!-- 正解の行は除外 -->
+    ORDER BY
+      RAND()
+    LIMIT #{limit}             <!-- ほしい件数分だけ取得 -->
+  </select>
+  
+  
+
+
+  <!--●ページネーション用-->
 
   <!-- （ページネーション用）全件数を取得 -->
   <select id="countAll" resultType="int">
@@ -94,6 +127,57 @@
   
   
   
+  <!-- ●ここから検索付きページネーション用 -->
+
+  <!--
+    キーワード条件でヒットする件数を数える。
+    keyword が null/空 の場合は WHERE 句なし（全件）。
+  -->
+  <select id="countByKeyword"
+          parameterType="string"
+          resultType="int">
+    SELECT
+      COUNT(*)
+    FROM
+      word
+    <where>
+      <!-- keyword が null/空 でなければ、英語 or 日本語に部分一致 -->
+      <if test="keyword != null and keyword != ''">
+        (english  LIKE CONCAT('%', #{keyword}, '%')
+         OR japanese LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+    </where>
+  </select>
+
+  <!--
+    キーワード条件＋ページネーションでデータを取得。
+    - keyword: 検索語（null/空なら WHERE なし）
+    - offset: 先頭からスキップする件数
+    - limit:  取得件数
+  -->
+  <select id="findPageByKeyword"
+          resultMap="WordResultMap">
+    SELECT
+      id,
+      english,
+      japanese
+    FROM
+      word
+    <where>
+      <if test="keyword != null and keyword != ''">
+        (english  LIKE CONCAT('%', #{keyword}, '%')
+         OR japanese LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+    </where>
+    ORDER BY
+      id
+    LIMIT #{offset}, #{limit}
+  </select>
   
+
+
+
+
+
 
 </mapper>

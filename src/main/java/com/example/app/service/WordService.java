@@ -79,7 +79,7 @@ public class WordService {
 			page = 1;
 		}
 		
-		// 先頭から何件スキップするかを計算 (0, size, 2*size, ...)
+		// 先頭から何件スキップするかを計算 (0, size, 2*size, ...)ページネーション何ページ目か
 		int offset = (page - 1) * size;
 		
 		// Mapper に offset/limit 指定で取得を依頼
@@ -87,6 +87,61 @@ public class WordService {
 		
 		
 	}
+	
+	
+	
+    /**
+     * 検索キーワード付きでの件数を取得する。
+     * keyword が null/空白のみ の場合は全件数を返す。
+     */
+	public int countByKeyword(String keyword) {
+		
+		// null や 空白だけ → 条件なし（全件）
+		if(keyword == null || keyword.isBlank()) {
+			return wordMapper.countAll();
+		}
+		
+		// 前後の空白をカットしたうえで検索に使う
+		String trimmed = keyword.trim();
+		return wordMapper.countByKeyword(trimmed);
+		
+	}
+	
+    /**
+     * 検索キーワード付きで、指定ページのデータを取得する。
+     *
+     * @param keyword 検索キーワード（null/空は条件なし）
+     * @param page    1 始まりのページ番号
+     * @param size    1ページあたりの件数
+     * @return 該当ページの Word 一覧
+     */
+	public List<Word> findPageByKeyword(String keyword, int page, int size){
+	
+		
+		// クエリ文字の脆弱性対策
+		// ページ番号が 1 未満なら 1 に矯正
+		if(page < 1) {
+			page = 1;
+		}
+		
+		// 先頭から何件スキップするかを計算 (0, size, 2*size, ...)
+		int offset = (page - 1) * size;
+		
+		
+		// keyword が null/空白のみ → 通常のページ取得（条件なし）
+		if(keyword == null || keyword.isBlank()) {
+			return wordMapper.findPage(offset, size);
+		}
+		
+		String trimmed = keyword.trim();
+		return wordMapper.findPageByKeyword(trimmed, offset, size);
+		
+		
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -124,5 +179,31 @@ public class WordService {
 	
 	
 	
-	
+    // ==========================
+    // クイズ用のメソッド
+    // ==========================
+
+    /**
+     * クイズ用: ランダムに1件の単語を取得する。
+     * Controller からはこのメソッドを呼ぶだけでよい。
+     *
+     * @return ランダムに選ばれた Word 1件
+     */
+	public Word getRandomWordForQuiz() {
+		return wordMapper.selectRandomWord();
+	}
+
+
+    /**
+     * クイズ用: 指定した単語(id)以外から、誤答候補の日本語を複数取得する。
+     *
+     * @param correctWordId 正解の Word の id
+     * @param wrongCount    欲しい誤答候補の件数（例: 3）
+     * @return 誤答候補の日本語リスト
+     */
+	public List<String> getWrongAnswersForQuiz(Long correctWordId, int worngCount){
+		return wordMapper.selectRandomWrongAnswers(correctWordId, worngCount);
+	}
+
+
 }

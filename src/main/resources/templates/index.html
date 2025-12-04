@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>英単語カードアプリ - メニュー</title>
+
+  <!-- 必要なら CSS を読み込む（任意）
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  -->
+</head>
+<body>
+  <h1>英単語カードアプリ</h1>
+  <p>メニューから機能を選んでください。</p>
+
+  <hr />
+
+  <h2>一般ユーザー向け</h2>
+  <ul>
+    <!-- ログイン前用4択クイズ画面（QuizController 側の /quiz） -->
+    <li><a th:href="@{/quiz}">4択クイズを始める</a></li>
+  </ul>
+
+  <h2>管理者向け</h2>
+  <ul>
+    <!-- 管理者用単語一覧（AdminWordController の /admin/words） -->
+    <li><a th:href="@{/admin/words}">単語一覧（管理者用）</a></li>
+  </ul>
+
+  <!-- 今後、ログイン画面やユーザー登録画面を作ったら、ここにリンクを追加していく想定 -->
+</body>
+</html>
