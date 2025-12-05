@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ユーザーHOME - 英単語カードアプリ</title>
+
+  <!-- 必要ならCSSを読み込む -->
+  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+  <!-- <link rel="stylesheet" th:href="@{/css/style.css}" /> -->
+
+  <style>
+    body {
+      margin: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .menu {
+      margin-top: 16px;
+      padding-left: 0;
+      list-style: none;
+    }
+    .menu li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ログイン中ユーザー名の表示 -->
+    <h1>
+      ようこそ、
+      <span th:text="${loginUser.name}">ユーザー名</span>
+      さん
+    </h1>
+
+    <p>ユーザー専用メニューです。</p>
+
+    <ul class="menu">
+      <!-- 将来：ログイン後用クイズページを作ったら、ここを差し替え予定 -->
+      <li>
+        <a th:href="@{/quiz}">クイズを始める（現在はログイン前と同じ画面）</a>
+      </li>
+      <!-- 将来：単語一覧（ユーザー用）ができたらここにリンクを追加 -->
+      <!-- <li><a th:href="@{/user/words}">単語一覧（ユーザー用）</a></li> -->
+      <!-- 将来：苦手単語リストができたらここにリンクを追加 -->
+      <!-- <li><a th:href="@{/user/weak-words}">苦手単語リスト</a></li> -->
+	  
+	  <li>
+	    <a th:href="@{/logout}">ログアウト</a>
+	  </li>
+	  
+      <li>
+        <a th:href="@{/}">トップページに戻る</a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -44,20 +44,23 @@
 
     /* 正解をクリックしたときの色（青） */
     .quiz-choice-correct-clicked {
-      background-color: #00ffff;   /* 青 */
+      background-color: #5bbefa;   /* 青 */
+	  font-weight: 700;
+	  color: #fff;
+	  text-shadow: 1px 1px 5px #808080
     }
 
     /* 不正解としてクリックされたときの色（オレンジ） */
     .quiz-choice-wrong-clicked {
-      background-color: #ff69b4;   /* オレンジ */
-      color: #000;
+      background-color: #fba24e;   /* オレンジ */
     }
 
     /* 正解として表示する色（不正解時に、正解の欄を緑にする） */
     .quiz-choice-correct-answer {
-      background-color: #00fa9a;   /* 緑 */
-      color: #fff;
+      background-color: #5bbefa;   /* 緑 */
 	  font-weight: 700;
+	  color: #fff;
+	  text-shadow: 1px 1px 5px #808080
     }
 
     /* 「次へ」ボタンのラッパー（中央寄せ） */
@@ -163,7 +166,7 @@
             setTimeout(function () {
               // 次の問題を表示（GET /quiz）
               window.location.href = "/quiz";
-            }, 1000); // 1000ミリ秒 = 1秒
+            }, 1500); // 1000ミリ秒 = 1秒
           } else {
             // ★ 不正解をクリックした場合：
             //   - クリックしたボタンをオレンジ色に

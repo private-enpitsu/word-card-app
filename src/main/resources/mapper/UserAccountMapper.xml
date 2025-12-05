@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  user_account テーブル用の MyBatis マッパー XML。
+  対応インターフェース: com.example.app.mapper.UserAccountMapper
+-->
+<mapper namespace="com.example.app.mapper.UserAccountMapper">
+
+  <!--
+    user_account の1行を UserAccount クラスにマッピングする resultMap
+    type には FQCN（完全修飾クラス名）を指定する
+  -->
+  <resultMap id="UserAccountResultMap" type="com.example.app.domain.UserAccount">
+    <!-- 主キー -->
+    <id     column="id"         property="id" />
+    <!-- 通常カラム -->
+    <result column="login_id"   property="loginId" />
+    <result column="password"   property="password" />
+    <result column="name"       property="name" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+  </resultMap>
+
+  <!--
+    ログインID で1件取得する。
+    - パラメータ: loginId（文字列）
+    - 戻り値: 該当する UserAccount（存在しなければ null）
+  -->
+  <select id="findByLoginId" parameterType="string" resultMap="UserAccountResultMap">
+    SELECT
+      id,
+      login_id,
+      password,
+      name,
+      created_at,
+      updated_at
+    FROM
+      user_account
+    WHERE
+      login_id = #{loginId}
+  </select>
+
+</mapper>

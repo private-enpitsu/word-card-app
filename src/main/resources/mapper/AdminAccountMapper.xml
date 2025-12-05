@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.AdminAccountMapper">
+
+<!--
+    admin_account の1行を AdminAccount クラスにマッピングする resultMap
+  -->
+  <resultMap id="AdminAccountResultMap" type="com.example.app.domain.AdminAccount">
+    <id     column="id"         property="id" />
+    <result column="login_id"   property="loginId" />
+    <result column="password"   property="password" />
+    <result column="name"       property="name" />
+    <result column="created_at" property="createdAt" />
+    <result column="updated_at" property="updatedAt" />
+  </resultMap>
+
+  <!--
+    ログインID で1件取得する。
+    - パラメータ: loginId（文字列）
+    - 戻り値: 該当する AdminAccount（存在しなければ null）
+  -->
+  <select id="findByLoginId" parameterType="string" resultMap="AdminAccountResultMap">
+    SELECT
+      id,
+      login_id,
+      password,
+      name,
+      created_at,
+      updated_at
+    FROM
+      admin_account
+    WHERE
+      login_id = #{loginId}
+  </select>
+
+</mapper>

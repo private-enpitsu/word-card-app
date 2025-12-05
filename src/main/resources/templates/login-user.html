@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ユーザーログイン - 英単語カードアプリ</title>
+
+  <!-- 必要であれば CSS を読み込む（開発の都合でコメントアウトのままでもOK） -->
+  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+  <!-- <link rel="stylesheet" th:href="@{/css/style.css}" /> -->
+
+  <style>
+    /* このページ専用の最低限のスタイル（あとで style.css に移動可） */
+    body {
+      margin: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 16px;
+    }
+    .login-container h1 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 6px 8px;
+      box-sizing: border-box;
+    }
+    .error-message {
+      color: #d9534f;
+      margin-bottom: 8px;
+    }
+    .actions {
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>ユーザーログイン</h1>
+
+    <!--
+      ログイン失敗時にクエリパラメータ ?error を付けてリダイレクトする想定。
+      まだ POST ログイン処理は実装していないが、先に枠だけ作っておく。
+      例: /login/user?error
+    -->
+    <div th:if="${param.error}" class="error-message">
+      ログインIDまたはパスワードが正しくありません。
+    </div>
+
+    <!--
+      ★ まだ /login/user の POST ハンドラは作っていないが、
+        将来そこへ飛ばす前提で th:action を設定しておく。
+        今の段階で試しに送信すると 405/404 になるが、それは「まだ実装していないため」です。
+    -->
+    <form th:action="@{/login/user}" method="post">
+      <div class="form-group">
+        <label for="loginId">ログインID</label>
+        <input type="text" id="loginId" name="loginId" />
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" />
+      </div>
+
+      <div class="actions">
+        <button type="submit">ログイン</button>
+      </div>
+    </form>
+
+    <div class="actions">
+      <!-- トップページへの戻りリンク -->
+      <p><a th:href="@{/}">トップへ戻る</a></p>
+    </div>
+  </div>
+</body>
+</html>

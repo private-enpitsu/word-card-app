@@ -2,31 +2,119 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>英単語カードアプリ - メニュー</title>
+  <title>英単語カードアプリ - トップ</title>
 
-  <!-- 必要なら CSS を読み込む（任意）
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <!--
+    必要であれば Bootstrap や独自CSSを読み込みます。
+    static/css 配下にファイルがある前提の例です。
+    無効にしたい場合はコメントアウトしておいてください。
   -->
+  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+  <!-- <link rel="stylesheet" th:href="@{/css/style.css}" /> -->
+
+  <style>
+    /* このページ専用の簡易スタイル（あとで style.css に移してもOK） */
+    body {
+      margin: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+    }
+
+    .section {
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .link-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .link-list li {
+      margin-bottom: 6px;
+    }
+
+    .main-quiz-button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 4px;
+      border: 1px solid #007bff;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .main-quiz-button:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <h1>英単語カードアプリ</h1>
-  <p>メニューから機能を選んでください。</p>
 
-  <hr />
+  <!-- ログインなしでクイズを遊ぶ入口 -->
+  <div class="section">
+    <div class="section-title">ログインせずにクイズを始める</div>
+    <!--
+      ログイン前クイズページへのリンク。
+      すでに実装済みの /quiz をそのまま使います。
+    -->
+    <p>
+      <a th:href="@{/quiz}" class="main-quiz-button">クイズを始める（ログイン不要）</a>
+    </p>
+  </div>
 
-  <h2>一般ユーザー向け</h2>
-  <ul>
-    <!-- ログイン前用4択クイズ画面（QuizController 側の /quiz） -->
-    <li><a th:href="@{/quiz}">4択クイズを始める</a></li>
-  </ul>
+  <!-- ユーザー向けメニュー（今後ログイン機能を実装したときの入口） -->
+  <div class="section">
+    <div class="section-title">ユーザー向け</div>
+    <ul class="link-list">
+      <!--
+        ここではまだ実装していない想定ですが、
+        先にURLだけ決めておきます。
+        あとで /login/user, /register/user のコントローラや
+        Spring Security 設定を追加していきます。
+      -->
+      <li>
+        <a th:href="@{/login/user}">ユーザーログイン</a>
+      </li>
+      <li>
+        <a th:href="@{/register/user}">ユーザー登録</a>
+      </li>
+    </ul>
+  </div>
 
-  <h2>管理者向け</h2>
-  <ul>
-    <!-- 管理者用単語一覧（AdminWordController の /admin/words） -->
-    <li><a th:href="@{/admin/words}">単語一覧（管理者用）</a></li>
-  </ul>
-
-  <!-- 今後、ログイン画面やユーザー登録画面を作ったら、ここにリンクを追加していく想定 -->
+  <!-- 管理者向けメニュー（管理画面への入口） -->
+  <div class="section">
+    <div class="section-title">管理者向け</div>
+    <ul class="link-list">
+      <!-- 管理者ログイン画面（今後実装） -->
+      <li>
+        <a th:href="@{/login/admin}">管理者ログイン</a>
+      </li>
+      <!-- 管理者登録画面（今後実装） -->
+      <li>
+        <a th:href="@{/register/admin}">管理者登録</a>
+      </li>
+	  
+<!--	  削除予定-->
+      <!-- すでにある管理者用単語一覧へのショートカット（※ログイン実装前は誰でも開けます） -->
+      <li>
+        <a th:href="@{/admin/words}">管理者用単語一覧（単語のCRUD）</a>
+      </li>
+	  
+    </ul>
+  </div>
 </body>
 </html>
