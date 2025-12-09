@@ -22,4 +22,16 @@ public interface UserAccountMapper {
      * @return 該当するユーザー 1件。存在しない場合は null を返す想定。
      */
 	UserAccount findByLoginId(@Param("loginId") String loginId);
+	
+	
+	
+	
+	
+    /**
+     * ユーザーを新規登録する。
+     *
+     * @param userAccount 登録するユーザー情報
+     */
+    void insert(UserAccount userAccount);
+	
 }

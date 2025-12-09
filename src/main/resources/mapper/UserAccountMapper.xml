@@ -40,5 +40,28 @@
     WHERE
       login_id = #{loginId}
   </select>
+  
+
+
+  <!--
+    ユーザーを新規登録する INSERT 文。
+    - id は AUTO_INCREMENT 前提で、INSERT 対象から外している。
+    - created_at / updated_at は DB 側のデフォルトに任せる想定。
+  -->
+  <insert id="insert" parameterType="com.example.app.domain.UserAccount">
+    INSERT INTO user_account (
+      login_id,
+      password,
+      name
+    )
+    VALUES (
+      #{loginId},
+      #{password},
+      #{name}
+    )
+  </insert>
+  
+  
+  
 
 </mapper>

@@ -87,7 +87,48 @@ public class UserAccountService {
 	
 	
 	
-	
+    /**
+     * ユーザーを新規登録する。
+     *
+     * - フォームから渡された生パスワードを BCrypt でハッシュ化してから DB に保存する。
+     * - DB には「ハッシュ値」だけが保存される。
+     *
+     * @param user 登録したいユーザー情報（loginId, password(生), name がセットされている想定）
+     */
+	@Transactional(readOnly = false) // 書き込みを行うので readOnly=false 読み取り専用を falseで上書き
+	public void register(UserAccount user) {
+		
+		// フォームから渡された「生」のパスワードを取得(UserAccount.javaのゲッター)
+		String rawPassword = user.getPassword();
+		
+		//●●●●●●●●●
+		System.out.println(user);
+		
+		
+		// null や空文字を防ぐ簡易チェック（必要に応じて強化可）
+		//コーディングで、バリデーション未実装などのミスへのセキュリティ
+		if(rawPassword == null || rawPassword.isEmpty()) {
+            // 本来は独自の例外クラスなどを投げるのが望ましいが、
+            // ここでは学習用として IllegalArgumentException にしておく。
+			// コンソールに表示される
+			throw new IllegalArgumentException("パスワードが入力されていません。");
+		}
+		
+		
+		// ★ 生パスワードを BCrypt でハッシュ化
+		String hashed = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
+		
+		
+		// UserAccount の password フィールドを「ハッシュ値」に置き換える
+		user.setPassword(hashed);
+		
+
+		
+		
+		// ★ user_account テーブルへ INSERT
+		userAccountMapper.insert(user);
+		
+	}
 	
 	
 	

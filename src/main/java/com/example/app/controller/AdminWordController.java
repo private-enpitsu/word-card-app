@@ -2,6 +2,7 @@ package com.example.app.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.domain.AdminAccount;
 import com.example.app.domain.Word;
 import com.example.app.service.WordService;
 
@@ -59,8 +61,19 @@ public class AdminWordController {
 	public String showWordList(
 			@RequestParam(name = "keyword", required = false) String keyword, //Null許可 keyword追加
 			@RequestParam(name = "page", defaultValue = "1") Integer page,
+			HttpSession session, // ★ 管理者ログイン状態を確認するために追加
 			Model model) {
 		
+		
+	    // ★ 管理者ログインチェック
+	    //   - セッションから "loginAdmin" を取り出し、未ログインなら /login/admin へリダイレクト
+	    AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if(loginAdmin == null) {
+	    	return "redirect:/login/admin";
+	    }
+	    
+	    // 必要なら管理者名を画面に渡す
+	    model.addAttribute("loginAdmin", loginAdmin);
 		
 		// 1ページあたりの表示件数（必要に応じて変更可）
 		int pageSize = 50;
@@ -131,7 +144,17 @@ public class AdminWordController {
      * - admin/word-form.html を表示する
      */
 	@GetMapping("/admin/words/new")
-	public String showCreateForm(Model model) {
+	public String showCreateForm(HttpSession session,
+								Model model) {
+		
+		
+		// ★ 管理者ログインチェック
+		AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if (loginAdmin == null) {
+	        return "redirect:/login/admin";
+	    }
+	    model.addAttribute("loginAdmin", loginAdmin);
+		
 		
 		model.addAttribute("word", new Word());	// フォームの初期表示用に、空の Word オブジェクトを渡す
 		
@@ -151,7 +174,15 @@ public class AdminWordController {
      */
 	@PostMapping("/admin/words")
 	public String create(@Valid @ModelAttribute("word") Word word,
-						Errors errors) {
+						Errors errors,
+						HttpSession session) {
+		
+	    // ★ 管理者ログインチェック
+	    AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if (loginAdmin == null) {
+	        return "redirect:/login/admin";
+	    }
+		
 		
 		// バリデーションエラーがある場合は、登録せずフォーム再表示
 		if(errors.hasErrors()) { // エラー情報は errors 経由でテンプレートに渡される
@@ -174,7 +205,19 @@ public class AdminWordController {
      * - 新規登録と同じ admin/word-form.html を使って表示する
      */
 	@GetMapping("/admin/words/{id}/edit")
-	public String showEditForm(@PathVariable("id") Long id, Model model) {
+	public String showEditForm(@PathVariable("id") Long id,
+								HttpSession session,
+								Model model) {
+
+	    // ★ 管理者ログインチェック
+	    AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if (loginAdmin == null) {
+	        return "redirect:/login/admin";
+	    }
+	    model.addAttribute("loginAdmin", loginAdmin);
+		
+		
+		
 		
 		Word word = wordService.findById(id);	// id から対象の Word を取得
 		
@@ -197,8 +240,17 @@ public class AdminWordController {
      */
 	@PostMapping("/admin/words/{id}")
 	public String update(@PathVariable("id") Long id, //URL の パスの一部 {id} を引数に受け取るためのアノテーションです。
-						@Valid @ModelAttribute("word") Word word,
-						Errors errors) { //フォームから送信された値を詰め込んだ Word wordオブジェクトを引数("word")で受け取る
+						@Valid @ModelAttribute("word") Word word, //フォームから送信された値を詰め込んだ Word wordオブジェクトを引数("word")で受け取る
+						Errors errors,
+						HttpSession session
+						) { 
+		
+	    // ★ 管理者ログインチェック
+	    AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if (loginAdmin == null) {
+	        return "redirect:/login/admin";
+	    }
+		
 		
 		word.setId(id);	// 念のため、パスの id をフォームの id に反映しておく（改ざん対策の意味もある）
 		
@@ -214,20 +266,7 @@ public class AdminWordController {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	
@@ -245,7 +284,16 @@ public class AdminWordController {
      *    実運用では CSRF 対策などを考えて POST/DELETE + 確認画面にすることが多い。
      */
 	@GetMapping("/admin/words/{id}/delete")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id,
+						HttpSession session
+						) {
+		
+	    // ★ 管理者ログインチェック
+	    AdminAccount loginAdmin = (AdminAccount) session.getAttribute("loginAdmin");
+	    if (loginAdmin == null) {
+	        return "redirect:/login/admin";
+	    }
+		
 		
 		wordService.delete(id);	// 指定された id のレコードを削除
 		
