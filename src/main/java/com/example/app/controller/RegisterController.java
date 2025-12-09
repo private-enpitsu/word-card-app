@@ -160,26 +160,31 @@ public class RegisterController {
             return "admin/register";
         }
 
+		// 2. パスワードと確認用パスワードの一致チェック
+		String password = form.getPassword();
+		String passwordConfirm = form.getPasswordConfirm();
+		
+        if (password != null && !password.equals(passwordConfirm)) {
+            // passwordConfirm フィールドにエラーを付与
+            errors.rejectValue(
+                    "passwordConfirm",
+                    "AdminRegisterForm.passwordConfirm.mismatch", // エラーコード（任意）
+                    "パスワードが一致しません。"
+            );
+            return "admin/register";
+        }
+        
+		
         // 2. フォーム → ドメイン(AdminAccount) への詰め替え
         AdminAccount admin = new AdminAccount();
         admin.setLoginId(form.getLoginId());
         admin.setPassword(form.getPassword()); // ★ Service 側でハッシュ化する想定
         admin.setName(form.getName());
 
-        // 3. 登録処理（★ここから先は推測になるため、Service 呼び出しはコメントに留めています）
-        //
-        // ★ AdminAccountService の中身が見えていないため、
-        //   どのメソッドを呼ぶかを確定できません。
-        //   例としては次のようなイメージになりますが、現時点ではコメントのままにしてあります。
-        //
-        // adminAccountService.register(admin);
-        //
-        // 実際に管理者登録も DB まで行いたい場合は、
-        // AdminAccountService.java の内容を貼っていただければ、
-        // それに合わせてここを仕上げます。
 
-        // 4. とりあえずは、管理者登録フォームに戻る or ログイン画面へリダイレクトの仕様を決める必要がありますが、
-        //    今回は「A-1: /login-admin へリダイレクト」という仕様でした。
+        // 4. 登録処理（Service 内で BCrypt によるハッシュ化＆INSERT）
+        adminAccountService.register(admin);
+        
         return "redirect:/login-admin";
     }
 	

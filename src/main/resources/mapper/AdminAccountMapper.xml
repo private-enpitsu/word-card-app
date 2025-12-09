@@ -33,4 +33,34 @@
       login_id = #{loginId}
   </select>
 
+
+
+
+  <!-- ==========================
+       管理者新規登録用 INSERT
+       ========================== -->
+
+  <!--
+    管理者ユーザーを新規登録する INSERT 文。
+    ※ここから先は仮の例／推測です。
+
+    前提：
+      - id は AUTO_INCREMENT のため INSERT 対象から除外
+      - created_at / updated_at は DB 側で自動設定 or NULL 許可
+  -->
+  <insert id="insert" parameterType="com.example.app.domain.AdminAccount">
+    INSERT INTO admin_account (
+      login_id,
+      password,
+      name
+    )
+    VALUES (
+      #{loginId},
+      #{password},
+      #{name}
+    )
+  </insert>
+  
+  
+  
 </mapper>

@@ -62,5 +62,44 @@ public class AdminAccountService {
 	}
 	
 	
+	
+	
+    // ==========================
+    // ★ 管理者登録メソッド
+    // ==========================
+	
+    /**
+     * 管理者ユーザーを新規登録する。
+     *
+     * - フォームから受け取った生パスワードを BCrypt でハッシュ化してから保存する。
+     * - admin.getPassword() には「生パスワード」が入っている前提。
+     *
+     * @param admin 生パスワードを含む AdminAccount
+     */
+    @Transactional(readOnly = false)
+    public void register(AdminAccount admin) {
+
+        // 生パスワードを取得
+        String rawPassword = admin.getPassword();
+
+        // null チェック（実装ミス検知用）
+        if (rawPassword == null) {
+            throw new IllegalArgumentException("パスワードが null です。フォームから値が渡っていません。");
+        }
+
+        // BCrypt でハッシュ化して AdminAccount にセット
+        String hashed = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
+        admin.setPassword(hashed);
+
+        // マッパーを使って INSERT 実行
+        adminAccountMapper.insert(admin);
+    }
+	
+	
+	
+	
+	
+	
+	
 
 }

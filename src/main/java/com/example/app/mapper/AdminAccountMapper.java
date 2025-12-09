@@ -21,4 +21,25 @@ public interface AdminAccountMapper {
      * @return 該当する管理者ユーザー 1件。存在しない場合は null を返す想定。
      */
 	AdminAccount findByLoginId(@Param("loginId") String loginId);
+	
+	
+	
+	
+	
+	
+	
+    // ==========================
+    // ★ 管理者新規登録用メソッド
+    // ==========================
+
+    /**
+     * 管理者ユーザーを新規登録する。
+     *
+     * <p>Service 層でパスワードを BCrypt でハッシュ化したうえで、
+     * そのハッシュ値を含む AdminAccount を渡す前提。</p>
+     *
+     * @param adminAccount 登録する管理者情報
+     */
+    void insert(AdminAccount adminAccount);
+    
 }
