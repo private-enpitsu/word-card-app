@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>単語一覧（ユーザー用）</title>
+
+  <!-- Bootstrap と共通CSSを読み込み -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="bg-light">
+
+  <div class="container my-4">
+    <!-- タイトル -->
+	<!-- タイトル＋ユーザーHOMEへのリンク -->
+	<div class="d-flex justify-content-between align-items-center mb-4">
+	  <h1 class="mb-0">単語一覧（ユーザー用）</h1>
+	  <a class="btn btn-outline-secondary" th:href="@{/user/home}">
+	    ユーザーHOMEへ戻る
+	  </a>
+	</div>
+
+    <!-- 検索フォーム -->
+    <form th:action="@{/user/words}" method="get" class="row g-2 align-items-center mb-3">
+      <div class="col-auto">
+        <label for="keyword" class="col-form-label">キーワード検索：</label>
+      </div>
+      <div class="col-sm-4">
+        <input
+          type="text"
+          id="keyword"
+          name="keyword"
+          class="form-control"
+          th:value="${keyword}" />
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">検索</button>
+      </div>
+      <div class="col-auto">
+        <!-- 全件表示に戻るリンク（keyword と page をクリア） -->
+        <a th:href="@{/user/words}" class="btn btn-outline-secondary">クリア</a>
+      </div>
+    </form>
+
+    <!-- 件数表示 -->
+    <p class="text-muted">
+      <span th:text="'該当件数: ' + ${totalCount} + ' 件'">該当件数: 0 件</span>
+    </p>
+
+    <!-- 単語一覧テーブル（閲覧専用） -->
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">英単語</th>
+            <th scope="col">日本語</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- wordList は UserWordController で Model に詰めたリスト -->
+          <tr th:each="word : ${wordList}">
+            <td th:text="${word.id}">1</td>
+            <td th:text="${word.english}">apple</td>
+            <td th:text="${word.japanese}">りんご</td>
+          </tr>
+          <!-- 該当件数ゼロの場合のメッセージ表示 -->
+          <tr th:if="${#lists.isEmpty(wordList)}">
+            <td colspan="3" class="text-center text-muted">
+              該当する単語はありません。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ページネーション情報 -->
+    <p class="text-muted">
+      <span th:text="'ページ ' + ${currentPage} + ' / ' + ${totalPages} + ' （全 ' + ${totalCount} + ' 件）'">
+        ページ 1 / 1 （全 0 件）
+      </span>
+    </p>
+
+    <!-- ページネーション（Bootstrapのpaginationを使用） -->
+    <nav aria-label="単語一覧ページネーション">
+      <ul class="pagination">
+
+        <!-- 前へ -->
+        <li class="page-item"
+            th:classappend="${currentPage <= 1} ? ' disabled'">
+          <a class="page-link"
+             th:href="@{/user/words(page=${currentPage - 1}, keyword=${keyword})}"
+             tabindex="-1"
+             aria-disabled="true">
+            前へ
+          </a>
+        </li>
+
+        <!-- ページ番号（1〜totalPages） -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(1, totalPages)}"
+            th:classappend="${i == currentPage} ? ' active'">
+          <a class="page-link"
+             th:href="@{/user/words(page=${i}, keyword=${keyword})}"
+             th:text="${i}">
+            1
+          </a>
+        </li>
+
+        <!-- 次へ -->
+        <li class="page-item"
+            th:classappend="${currentPage >= totalPages} ? ' disabled'">
+          <a class="page-link"
+             th:href="@{/user/words(page=${currentPage + 1}, keyword=${keyword})}">
+            次へ
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <!-- Bootstrap の JavaScript（必要であれば読み込み） -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

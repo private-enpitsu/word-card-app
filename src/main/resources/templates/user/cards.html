@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>英単語カード（単語暗記）</title>
+
+  <!-- Bootstrap と共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="bg-light">
+
+  <div class="container my-4">
+
+    <!-- タイトル＋ユーザーHOMEへのリンク -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-0">英単語カード（単語暗記）</h1>
+        <!-- ログイン中ユーザー名（必要なければこの行は削除してもOK） -->
+        <p class="text-muted mb-0" th:if="${loginUser != null}">
+          ログイン中：<span th:text="${loginUser.name}">User Name</span>
+        </p>
+      </div>
+      <a class="btn btn-outline-secondary" th:href="@{/user/home}">
+        ユーザーHOMEへ戻る
+      </a>
+    </div>
+
+    <!-- 説明文 -->
+    <p class="mb-4">
+      ランダムに表示される英単語を暗記するページです。<br />
+      「めくる」ボタンで日本語が表示され、「次へ」で別の単語に進みます。
+    </p>
+
+    <!-- カード本体 -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+
+            <!-- 英単語（常に表示） -->
+            <p class="text-muted mb-1">英単語</p>
+            <h2 class="display-5 fw-bold" th:text="${cardWord.english}">example</h2>
+
+            <hr />
+
+            <!-- 日本語（初期状態は非表示／めくるボタンで表示） -->
+            <div id="answerArea" class="mt-3 d-none">
+              <p class="text-muted mb-1">日本語</p>
+              <p class="fs-4 mb-0" th:text="${cardWord.japanese}">例</p>
+            </div>
+
+          </div>
+
+          <!-- カード下部のボタン -->
+          <div class="card-footer bg-white">
+            <div class="d-flex justify-content-between">
+              <!-- 答えを表示（めくる） -->
+              <button
+                id="revealButton"
+                type="button"
+                class="btn btn-outline-primary">
+                めくる（答えを表示）
+              </button>
+
+              <!-- 次へ：常に表示 -->
+              <a
+                th:href="@{/user/cards}"
+                class="btn btn-primary">
+                次へ
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bootstrap の JavaScript -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+  <!-- めくるボタン用のシンプルなJavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const revealButton = document.getElementById("revealButton");
+      const answerArea = document.getElementById("answerArea");
+
+      if (revealButton && answerArea) {
+        revealButton.addEventListener("click", function () {
+          // 日本語の答えを表示
+          answerArea.classList.remove("d-none");
+          // ボタンは一度押したら無効化（連打防止）
+          revealButton.disabled = true;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
