@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="UTF-8" />
+	    <title>管理者ログイン - 英単語カードアプリ</title>
+	    <!-- Bootstrap / 独自CSS 読み込み -->
+	    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	    <link rel="stylesheet" th:href="@{/css/style.css}" />
+	</head>
+	<body>
+	  <div class="container py-5">
+	    <div class="row justify-content-center">
+	      <div class="col-md-6 col-lg-4">
+	        <div class="card shadow-sm">
+	          <div class="card-body">
+	            <h1 class="h4 mb-4 text-center">管理者ログイン</h1>
+
+	<!--
+	  ユーザー用と同様に、?error クエリパラメータが付いている場合に
+	  エラーメッセージを表示する。
+	  LoginController#loginAdmin で、認証失敗時に
+	  redirect:/login/admin?error としている前提。
+	-->
+	<!-- ログイン失敗時のエラーメッセージ -->
+	            <div th:if="${param.error}" class="alert alert-danger py-2">
+	              ログインIDまたはパスワードが正しくありません。
+	            </div>
+
+				<!-- 管理者ログインフォーム -->
+				            <form th:action="@{/login/admin}" method="post">
+				              <div class="mb-3">
+				                <label for="loginId" class="form-label">ログインID</label>
+				                <input type="text"
+				                       id="loginId"
+				                       name="loginId"
+				                       class="form-control" />
+				              </div>
+
+				              <div class="mb-3">
+				                <label for="password" class="form-label">パスワード</label>
+				                <input type="password"
+				                       id="password"
+				                       name="password"
+				                       class="form-control" />
+				              </div>
+
+				              <div class="d-grid mb-3">
+				                <button type="submit" class="btn btn-primary">
+				                  ログイン
+				                </button>
+				              </div>
+				            </form>
+
+				            <div class="text-center">
+				              <a th:href="@{/}">トップへ戻る</a>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <!-- Bootstrap の JavaScript -->
+				  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+				</body>
+</html>

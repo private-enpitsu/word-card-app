@@ -121,7 +121,7 @@ public class RegisterController {
      // 4. 登録処理（Service 内で BCrypt によるハッシュ化＆INSERT）
         userAccountService.register(user);
         
-		return "redirect:/login-user"; // 5. 登録完了後はユーザーログイン画面へリダイレクト
+		return "redirect:/login/user"; // 5. 登録完了後はユーザーログイン画面へリダイレクト
 	}
 	
 	
@@ -155,7 +155,7 @@ public class RegisterController {
 					    		Errors errors
 					    		) {
 
-    	// 1. アノテーションによるバリデーション結果の確認
+    	// 1. formクラスのアノテーションによるバリデーション結果の確認
         if (errors.hasErrors()) {
             return "admin/register";
         }
@@ -165,7 +165,9 @@ public class RegisterController {
 		String passwordConfirm = form.getPasswordConfirm();
 		
         if (password != null && !password.equals(passwordConfirm)) {
+        	
             // passwordConfirm フィールドにエラーを付与
+        	// errors.rejectValue(フィールド名, エラーコード, デフォルトメッセージ);
             errors.rejectValue(
                     "passwordConfirm",
                     "AdminRegisterForm.passwordConfirm.mismatch", // エラーコード（任意）
@@ -185,7 +187,7 @@ public class RegisterController {
         // 4. 登録処理（Service 内で BCrypt によるハッシュ化＆INSERT）
         adminAccountService.register(admin);
         
-        return "redirect:/login-admin";
+        return "redirect:/login/admin";
     }
 	
 	

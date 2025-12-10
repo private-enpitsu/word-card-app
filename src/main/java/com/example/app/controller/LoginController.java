@@ -46,6 +46,21 @@ public class LoginController {
 	}
 	
 	
+	
+	
+	
+    /**
+     * ユーザー用ログイン画面の表示。
+     *
+     * URL: GET /login/user
+     * 対応テンプレート: templates/login-user.html
+     */
+	@GetMapping("/login/user")
+	public String showUserLoginForm() {
+		return "login/user"; // 単にビュー名を返すだけ。Model には何も入れていない。
+	}
+	
+	
     /**
      * ユーザーログイン処理（フォームからの POST を受け取る）。
      *
@@ -80,6 +95,23 @@ public class LoginController {
         session.setAttribute("loginUser", user);
         
         return "redirect:/user/home"; //user/homeへ
+	}
+	
+	
+	
+
+	
+	
+	
+    /**
+     * 管理者用ログイン画面の表示。
+     *
+     * URL: GET /login/admin
+     * 対応テンプレート: templates/login-admin.html
+     */
+	@GetMapping("/login/admin")
+	public String showAdminLoginForm() {
+		return "login/admin"; // 単にビュー名を返すだけ。Model には何も入れていない。
 	}
 	
 	
@@ -119,32 +151,8 @@ public class LoginController {
 	
 	
 	
-	
-    /**
-     * ユーザー用ログイン画面の表示。
-     *
-     * URL: GET /login/user
-     * 対応テンプレート: templates/login-user.html
-     */
-	@GetMapping("/login/user")
-	public String showUserLoginForm() {
-		return "login-user"; // 単にビュー名を返すだけ。Model には何も入れていない。
-	}
-	
-	
-	
-    /**
-     * 管理者用ログイン画面の表示。
-     *
-     * URL: GET /login/admin
-     * 対応テンプレート: templates/login-admin.html
-     */
-	@GetMapping("/login/admin")
-	public String showAdminLoginForm() {
-		return "login-admin"; // 単にビュー名を返すだけ。Model には何も入れていない。
-	}
-	
-	
+
+
 	
     /**
      * ログアウト処理。
