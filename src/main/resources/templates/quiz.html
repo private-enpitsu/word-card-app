@@ -1,139 +1,137 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>英単語クイズ - Ocean</title>
+	<meta charset="UTF-8" />
+	<title>英単語クイズ</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" th:href="@{/css/ocean-theme.css}">
-  <!-- 必要であれば Bootstrap 読み込み（レイアウトには依存していない） -->
-  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
-  
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}">
+	<!-- 必要であれば Bootstrap 読み込み（レイアウトには依存していない） -->
+	<!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+
 </head>
+
 <body>
-  <div class="quiz-container">
-    <!-- ヘッダー（タイトルなど） -->
-    <div class="header">
-      <h1>🌊 英単語クイズ</h1>
-      <p>次の英単語の意味として正しいものを1つ選んでください。</p>
-    </div>
 
-    <!-- プログレスバー（現時点では見た目のみ） -->
-    <div class="progress-bar">
-      <div class="progress-fill"></div>
-    </div>
+	<div class="content-wrap"><!--content-wrap-->
+		<div class="quiz-container">
+			<!-- ヘッダー（タイトルなど） -->
+			<div class="header">
+				<h1>🌊 英単語クイズ</h1>
+				<p>次の英単語の意味として正しいものを1つ選んでください。</p>
+			</div>
 
-    <!-- 問題文表示エリア -->
-    <div class="question-section">
-      <p class="question-text">
-        「<span th:text="${questionWord.english}">today</span>」の意味は？
-      </p>
-    </div>
+			<!-- プログレスバー（現時点では見た目のみ） -->
+			<div class="progress-bar">
+				<div class="progress-fill"></div>
+			</div>
 
-    <!-- ★ 正解の日本語（JS 判定用） -->
-    <input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
+			<!-- 問題文表示エリア -->
+			<div class="question-section">
+				<p class="question-text">
+					「<span th:text="${questionWord.english}">today</span>」の意味は？
+				</p>
+			</div>
 
-    <!-- 選択肢（2列グリッドで配置） -->
-    <div class="answers-grid" id="choices-container">
-      <!--
+			<!-- ★ 正解の日本語（JS 判定用） -->
+			<input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
+
+			<!-- 選択肢（2列グリッドで配置） -->
+			<div class="answers-grid" id="choices-container">
+				<!--
         th:each で 4 つの選択肢を繰り返し表示する。
         data-choice に、その選択肢の値（日本語）を埋め込んでおく。
         JS は従来どおり class="quiz-choice-btn" を基準に動作する。
       -->
-      <button
-        type="button"
-        class="answer-btn quiz-choice-btn"
-        th:each="choice : ${choices}"
-        th:text="${choice}"
-        th:attr="data-choice=${choice}">
-        サンプル選択肢
-      </button>
-    </div>
+				<button type="button" class="answer-btn quiz-choice-btn" th:each="choice : ${choices}"
+					th:text="${choice}" th:attr="data-choice=${choice}">
+					サンプル選択肢
+				</button>
+			</div>
 
-    <!-- 不正解時のみ表示する「次へ」ボタン -->
-    <div class="quiz-next-wrapper">
-      <button
-        id="nextButton"
-        class="quiz-next-button"
-        type="button"
-        style="display: none;">
-        次へ
-      </button>
-    </div>
-  </div>
+			<!-- 不正解時のみ表示する「次へ」ボタン -->
+			<div class="quiz-next-wrapper">
+				<button id="nextButton" class="quiz-next-button" type="button" style="display: none;">
+					次へ
+				</button>
+			</div>
+		</div>
+	</div>
 
-  <!-- ★ クイズ用の JavaScript（ロジックは従来どおり） -->
-  <script>
-    // ページの読み込みが完了したら処理を開始
-    document.addEventListener("DOMContentLoaded", function () {
-      // 正解の日本語（hidden の値）
-      const correctJapaneseInput = document.getElementById("correctJapanese");
-      const correctJapanese = correctJapaneseInput ? correctJapaneseInput.value : "";
+	<!-- ★ クイズ用の JavaScript（ロジックは従来どおり） -->
+	<script>
+		// ページの読み込みが完了したら処理を開始
+		document.addEventListener("DOMContentLoaded", function () {
+			// 正解の日本語（hidden の値）
+			const correctJapaneseInput = document.getElementById("correctJapanese");
+			const correctJapanese = correctJapaneseInput ? correctJapaneseInput.value : "";
 
-      // 4つの選択肢ボタン
-      const choiceButtons = document.querySelectorAll(".quiz-choice-btn");
+			// 4つの選択肢ボタン
+			const choiceButtons = document.querySelectorAll(".quiz-choice-btn");
 
-      // 「次へ」ボタン
-      const nextButton = document.getElementById("nextButton");
+			// 「次へ」ボタン
+			const nextButton = document.getElementById("nextButton");
 
-      // 1問につき最初の1クリックだけを有効にするためのフラグ
-      let answered = false;
+			// 1問につき最初の1クリックだけを有効にするためのフラグ
+			let answered = false;
 
-      choiceButtons.forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          // すでに回答済みなら何もしない（多重クリック防止）
-          if (answered) {
-            return;
-          }
-          answered = true;
+			choiceButtons.forEach(function (btn) {
+				btn.addEventListener("click", function () {
+					// すでに回答済みなら何もしない（多重クリック防止）
+					if (answered) {
+						return;
+					}
+					answered = true;
 
-          // クリックされた選択肢の値
-          const selected = btn.getAttribute("data-choice");
+					// クリックされた選択肢の値
+					const selected = btn.getAttribute("data-choice");
 
-          // すべての選択肢ボタンのクリックを無効化（見た目もクリック不可に）
-          choiceButtons.forEach(function (b) {
-            b.classList.add("disabled");
-          });
+					// すべての選択肢ボタンのクリックを無効化（見た目もクリック不可に）
+					choiceButtons.forEach(function (b) {
+						b.classList.add("disabled");
+					});
 
-          if (selected === correctJapanese) {
-            // ★ 正解をクリックした場合：
-            //   - クリックしたボタンを正解色にする
-            //   - 1.5秒後に次の問題へ（/quiz へ遷移）
-            btn.classList.add("quiz-choice-correct-clicked");
+					if (selected === correctJapanese) {
+						// ★ 正解をクリックした場合：
+						//   - クリックしたボタンを正解色にする
+						//   - 1.5秒後に次の問題へ（/quiz へ遷移）
+						btn.classList.add("quiz-choice-correct-clicked");
 
-            setTimeout(function () {
-              // 次の問題を表示（GET /quiz）
-              window.location.href = "/quiz";
-            }, 1500);
-          } else {
-            // ★ 不正解をクリックした場合：
-            //   - クリックしたボタンを不正解色に
-            //   - 正解のボタンを正解色に
-            //   - 「次へ」ボタンを表示し、ユーザー操作を待つ
-            btn.classList.add("quiz-choice-wrong-clicked");
+						setTimeout(function () {
+							// 次の問題を表示（GET /quiz）
+							window.location.href = "/quiz";
+						}, 1500);
+					} else {
+						// ★ 不正解をクリックした場合：
+						//   - クリックしたボタンを不正解色に
+						//   - 正解のボタンを正解色に
+						//   - 「次へ」ボタンを表示し、ユーザー操作を待つ
+						btn.classList.add("quiz-choice-wrong-clicked");
 
-            // 正解の選択肢にだけ「正解」のクラスを付ける
-            choiceButtons.forEach(function (b) {
-              const value = b.getAttribute("data-choice");
-              if (value === correctJapanese) {
-                b.classList.add("quiz-choice-correct-answer");
-              }
-            });
+						// 正解の選択肢にだけ「正解」のクラスを付ける
+						choiceButtons.forEach(function (b) {
+							const value = b.getAttribute("data-choice");
+							if (value === correctJapanese) {
+								b.classList.add("quiz-choice-correct-answer");
+							}
+						});
 
-            // 「次へ」ボタンを表示して、ユーザーの操作を待つ
-            if (nextButton) {
-              nextButton.style.display = "inline-block";
+						// 「次へ」ボタンを表示して、ユーザーの操作を待つ
+						if (nextButton) {
+							nextButton.style.display = "inline-block";
 
-              nextButton.addEventListener("click", function () {
-                // 次の問題を表示（GET /quiz）
-                window.location.href = "/quiz";
-              });
-            }
-          }
-        });
-      });
-    });
-  </script>
+							nextButton.addEventListener("click", function () {
+								// 次の問題を表示（GET /quiz）
+								window.location.href = "/quiz";
+							});
+						}
+					}
+				});
+			});
+		});
+	</script>
 </body>
+
 </html>
