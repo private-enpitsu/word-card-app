@@ -93,6 +93,7 @@ public class UserWordController {
         List<Word> wordList = wordService.findPageByKeyword(keyword, page, pageSize);
 
         // テンプレートに渡す
+        model.addAttribute("loginUser", loginUser);
         model.addAttribute("wordList", wordList);     // 一覧データ
         model.addAttribute("currentPage", page);      // 現在ページ
         model.addAttribute("totalPages", totalPages); // 総ページ数

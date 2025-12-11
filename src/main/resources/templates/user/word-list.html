@@ -1,126 +1,415 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>単語一覧（ユーザー用）</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>単語一覧（ユーザー用）</title>
 
-  <!-- Bootstrap と共通CSSを読み込み -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+	<!-- Ocean テーマ共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+
+	<style>
+		/* ヘッダー周り */
+		.header-sub {
+			color: #555;
+			font-size: 0.9rem;
+			margin-top: 4px;
+		}
+
+		.home-link {
+			margin-top: 4px;
+			font-size: 0.9rem;
+		}
+
+		.home-link a {
+			color: #0288d1;
+			text-decoration: none;
+		}
+
+		.home-link a:hover {
+			text-decoration: underline;
+		}
+
+		/* 検索フォームブロック */
+		.search-section {
+			background: rgba(255, 255, 255, 0.95);
+			border-radius: 14px;
+			padding: 16px 18px;
+			margin-top: 16px;
+			margin-bottom: 10px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+		}
+
+		.search-form {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px 12px;
+			font-size: 0.95rem;
+		}
+
+		.search-label {
+			white-space: nowrap;
+			color: #01579b;
+			font-weight: 600;
+		}
+
+		.search-input {
+			flex: 1 1 160px;
+			min-width: 0;
+			padding: 8px 10px;
+			border-radius: 10px;
+			border: 1px solid #b3e5fc;
+			font-size: 0.95rem;
+			box-sizing: border-box;
+			outline: none;
+			transition: border-color 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.search-input:focus {
+			border-color: #4fc3f7;
+			box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.3);
+		}
+
+		.search-buttons {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.btn-primary-like,
+		.btn-outline-like {
+			padding: 8px 14px;
+			border-radius: 10px;
+			font-size: 0.9rem;
+			font-weight: 500;
+			cursor: pointer;
+			border: 2px solid transparent;
+			text-decoration: none;
+			text-align: center;
+			box-sizing: border-box;
+			transition: all 0.2s ease;
+		}
+
+		.btn-primary-like {
+			background: #2193b0;
+			border-color: #2193b0;
+			color: #ffffff;
+		}
+
+		.btn-primary-like:hover {
+			background: #1a7c94;
+			border-color: #1a7c94;
+			box-shadow: 0 4px 10px rgba(33, 147, 176, 0.4);
+			transform: translateY(-1px);
+		}
+
+		.btn-outline-like {
+			background: #ffffff;
+			border-color: #b3e5fc;
+			color: #0288d1;
+		}
+
+		.btn-outline-like:hover {
+			background: #e1f5fe;
+			border-color: #4fc3f7;
+			color: #01579b;
+		}
+
+		/* 件数表示 */
+		.result-count {
+			font-size: 0.9rem;
+			color: #555;
+			margin: 6px 2px 10px;
+		}
+
+		/* テーブル */
+		.word-table-wrapper {
+			margin-top: 4px;
+			background: rgba(255, 255, 255, 0.98);
+			border-radius: 14px;
+			padding: 12px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			overflow-x: auto;
+		}
+
+		table.word-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.95rem;
+			min-width: 320px;
+		}
+
+		table.word-table thead {
+			background: #e1f5fe;
+		}
+
+		table.word-table th,
+		table.word-table td {
+			padding: 8px 10px;
+			border-bottom: 1px solid #d0e7f7;
+			text-align: left;
+		}
+
+		table.word-table th {
+			color: #01579b;
+			font-weight: 600;
+			white-space: nowrap;
+		}
+
+		table.word-table tbody tr:nth-child(even) {
+			background: #f7fbff;
+		}
+
+		table.word-table tbody tr:hover {
+			background: #eaf5ff;
+		}
+
+		.word-table-empty {
+			text-align: center;
+			color: #999;
+			padding: 16px 8px;
+		}
+
+		/* ページ情報 */
+		.page-info {
+			font-size: 0.9rem;
+			color: #555;
+			margin: 10px 2px 4px;
+		}
+
+		/* ページネーション */
+		.pagination-wrapper {
+			margin-top: 36px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.pagination {
+			display: inline-flex;
+			list-style: none;
+			padding-left: 0;
+			margin: 0;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.9);
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+		}
+
+		.pagination li {
+			margin: 0;
+		}
+
+		.page-link-like {
+			display: block;
+			padding: 8px 12px;
+			min-width: 36px;
+			text-align: center;
+			font-size: 0.9rem;
+			color: #0288d1;
+			text-decoration: none;
+			border-right: 1px solid #d0ecff;
+			box-sizing: border-box;
+			transition: background 0.2s ease, color 0.2s ease;
+		}
+
+		.pagination li:last-child .page-link-like {
+			border-right: none;
+		}
+
+		.page-link-like:hover {
+			background: #e1f5fe;
+			color: #01579b;
+		}
+
+		.page-item-disabled .page-link-like {
+			color: #aaa;
+			pointer-events: none;
+			background: #f5f5f5;
+		}
+
+		.page-item-active .page-link-like {
+			background: #2193b0;
+			color: #ffffff;
+			font-weight: 600;
+		}
+
+		/* スマホ対応 */
+		@media (max-width: 600px) {
+			.quiz-container {
+				padding: 20px;
+				margin: 0 8px;
+			}
+
+			.header h1 {
+				font-size: 1.3rem;
+			}
+
+			.search-section {
+				padding: 12px 12px;
+			}
+
+			.search-form {
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			.search-label {
+				margin-bottom: 2px;
+			}
+
+			.search-buttons {
+				justify-content: flex-start;
+			}
+
+			.word-table-wrapper {
+				padding: 10px;
+			}
+
+			table.word-table th,
+			table.word-table td {
+				padding: 6px 8px;
+				font-size: 0.85rem;
+			}
+		}
+	</style>
 </head>
-<body class="bg-light">
 
-  <div class="container my-4">
-    <!-- タイトル -->
-	<!-- タイトル＋ユーザーHOMEへのリンク -->
-	<div class="d-flex justify-content-between align-items-center mb-4">
-	  <h1 class="mb-0">単語一覧（ユーザー用）</h1>
-	  <a class="btn btn-outline-secondary" th:href="@{/user/home}">
-	    ユーザーHOMEへ戻る
-	  </a>
-	</div>
+<body>
 
-    <!-- 検索フォーム -->
-    <form th:action="@{/user/words}" method="get" class="row g-2 align-items-center mb-3">
-      <div class="col-auto">
-        <label for="keyword" class="col-form-label">キーワード検索：</label>
-      </div>
-      <div class="col-sm-4">
-        <input
-          type="text"
-          id="keyword"
-          name="keyword"
-          class="form-control"
-          th:value="${keyword}" />
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary">検索</button>
-      </div>
-      <div class="col-auto">
-        <!-- 全件表示に戻るリンク（keyword と page をクリア） -->
-        <a th:href="@{/user/words}" class="btn btn-outline-secondary">クリア</a>
-      </div>
-    </form>
+	<!-- 共通ユーザーヘッダー（ナビゲーション） -->
+	<div th:replace="~{fragments/user-header :: userHeader}"></div>
 
-    <!-- 件数表示 -->
-    <p class="text-muted">
-      <span th:text="'該当件数: ' + ${totalCount} + ' 件'">該当件数: 0 件</span>
-    </p>
+	<div class="content-wrap"><!--content-wrap-->
+		<div class="quiz-container">
+			<!-- ヘッダー -->
+			<div class="header" style="text-align: left;">
+				<h1>単語一覧</h1>
+				<p class="header-sub">
+					登録されている英単語を一覧で確認できます。キーワード検索も可能です。
+				</p>
+<!--				<p class="home-link">-->
+<!--					<a th:href="@{/user/home}">ユーザーHOMEへ戻る</a>-->
+<!--				</p>-->
+			</div>
 
-    <!-- 単語一覧テーブル（閲覧専用） -->
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered align-middle">
-        <thead class="table-light">
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">英単語</th>
-            <th scope="col">日本語</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- wordList は UserWordController で Model に詰めたリスト -->
-          <tr th:each="word : ${wordList}">
-            <td th:text="${word.id}">1</td>
-            <td th:text="${word.english}">apple</td>
-            <td th:text="${word.japanese}">りんご</td>
-          </tr>
-          <!-- 該当件数ゼロの場合のメッセージ表示 -->
-          <tr th:if="${#lists.isEmpty(wordList)}">
-            <td colspan="3" class="text-center text-muted">
-              該当する単語はありません。
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+			<!-- 検索フォーム -->
+			<div class="search-section">
+				<form th:action="@{/user/words}" method="get" class="search-form">
+					<label for="keyword" class="search-label">キーワード検索：</label>
 
-    <!-- ページネーション情報 -->
-    <p class="text-muted">
-      <span th:text="'ページ ' + ${currentPage} + ' / ' + ${totalPages} + ' （全 ' + ${totalCount} + ' 件）'">
-        ページ 1 / 1 （全 0 件）
-      </span>
-    </p>
+					<input type="text" id="keyword" name="keyword" class="search-input" th:value="${keyword}" />
 
-    <!-- ページネーション（Bootstrapのpaginationを使用） -->
-    <nav aria-label="単語一覧ページネーション">
-      <ul class="pagination">
+					<div class="search-buttons">
+						<button type="submit" class="btn-primary-like">
+							検索
+						</button>
 
-        <!-- 前へ -->
-        <li class="page-item"
-            th:classappend="${currentPage <= 1} ? ' disabled'">
-          <a class="page-link"
-             th:href="@{/user/words(page=${currentPage - 1}, keyword=${keyword})}"
-             tabindex="-1"
-             aria-disabled="true">
-            前へ
-          </a>
-        </li>
+						<!-- 全件表示に戻る -->
+						<a th:href="@{/user/words}" class="btn-outline-like">
+							クリア
+						</a>
+					</div>
+				</form>
+			</div>
 
-        <!-- ページ番号（1〜totalPages） -->
-        <li class="page-item"
-            th:each="i : ${#numbers.sequence(1, totalPages)}"
-            th:classappend="${i == currentPage} ? ' active'">
-          <a class="page-link"
-             th:href="@{/user/words(page=${i}, keyword=${keyword})}"
-             th:text="${i}">
-            1
-          </a>
-        </li>
+			<!-- 件数表示 -->
+			<p class="result-count">
+				<span th:text="'該当件数: ' + ${totalCount} + ' 件'">
+					該当件数: 0 件
+				</span>
+			</p>
 
-        <!-- 次へ -->
-        <li class="page-item"
-            th:classappend="${currentPage >= totalPages} ? ' disabled'">
-          <a class="page-link"
-             th:href="@{/user/words(page=${currentPage + 1}, keyword=${keyword})}">
-            次へ
-          </a>
-        </li>
-      </ul>
-    </nav>
+			<!-- 単語一覧テーブル -->
+			<div class="word-table-wrapper">
+				<table class="word-table">
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">英単語</th>
+							<th scope="col">日本語</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- wordList は UserWordController で Model に詰めたリスト -->
+						<tr th:each="word : ${wordList}">
+							<td th:text="${word.id}">1</td>
+							<td th:text="${word.english}">apple</td>
+							<td th:text="${word.japanese}">りんご</td>
+						</tr>
 
-  </div>
+						<!-- 該当件数ゼロの場合 -->
+						<tr th:if="${#lists.isEmpty(wordList)}">
+							<td colspan="3" class="word-table-empty">
+								該当する単語はありません。
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-  <!-- Bootstrap の JavaScript（必要であれば読み込み） -->
-  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+
+			<!-- ページネーション -->
+			<div class="pagination-wrapper" aria-label="単語一覧ページネーション">
+				<ul class="pagination" th:with="start=${currentPage - 1}, end=${currentPage + 1}">
+
+					<!-- 前へ -->
+					<li th:class="'page-item' + (${currentPage <= 1} ? ' page-item-disabled' : '')">
+						<a class="page-link-like" th:href="@{/user/words(page=${currentPage - 1}, keyword=${keyword})}">
+							前へ
+						</a>
+					</li>
+
+					<!-- 先頭ページ（1ページ目） -->
+					<li class="page-item" th:classappend="${currentPage == 1} ? ' page-item-active'">
+						<a class="page-link-like" th:href="@{/user/words(page=${1}, keyword=${keyword})}">
+							1
+						</a>
+					</li>
+
+					<!-- 左側の省略記号（現在ページが3より大きい場合に表示） -->
+					<li class="page-item page-item-disabled" th:if="${currentPage > 3}">
+						<span class="page-link-like">…</span>
+					</li>
+
+					<!-- 中央付近のページ（currentPage-1 ～ currentPage+1 の範囲で、2 ～ totalPages-1 に収まるものだけ） -->
+					<li class="page-item" th:each="i : ${#numbers.sequence(start, end)}"
+						th:if="${i > 1 and i < totalPages}" th:classappend="${i == currentPage} ? ' page-item-active'">
+						<a class="page-link-like" th:href="@{/user/words(page=${i}, keyword=${keyword})}"
+							th:text="${i}">
+							2
+						</a>
+					</li>
+
+					<!-- 右側の省略記号（現在ページが totalPages-2 未満の場合に表示） -->
+					<li class="page-item page-item-disabled" th:if="${currentPage < totalPages - 2}">
+						<span class="page-link-like">…</span>
+					</li>
+
+					<!-- 最終ページ（totalPages が 2 以上のときだけ表示） -->
+					<li class="page-item" th:if="${totalPages > 1}"
+						th:classappend="${currentPage == totalPages} ? ' page-item-active'">
+						<a class="page-link-like" th:href="@{/user/words(page=${totalPages}, keyword=${keyword})}"
+							th:text="${totalPages}">
+							10
+						</a>
+					</li>
+
+					<!-- 次へ -->
+					<li th:class="'page-item' + (${currentPage >= totalPages} ? ' page-item-disabled' : '')">
+						<a class="page-link-like" th:href="@{/user/words(page=${currentPage + 1}, keyword=${keyword})}">
+							次へ
+						</a>
+					</li>
+
+				</ul>
+			</div>
+
+
+
+		</div>
+	</div><!--content-wrap-->
 </body>
+
 </html>

@@ -1,169 +1,210 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>英単語4択クイズ（ログイン後）</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>英単語4択クイズ（ログイン後）</title>
 
-  <!-- Bootstrap と共通CSSを読み込み -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+	<!-- Ocean テーマCSS -->
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
 
-  <!-- このページ用の簡易スタイル（ボタンカラーなど） -->
-  <style>
-    .quiz-question {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 16px;
-    }
+	<style>
+		/* ログイン後クイズ特有の少しだけ追加スタイル */
 
-    .quiz-choice-btn {
-      display: block;
-      width: 100%;
-      padding: 10px 14px;
-      margin-bottom: 8px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      background-color: #fff;
-      cursor: pointer;
-      text-align: left;
-      box-sizing: border-box;
-    }
+		.home-link {
+			/*margin-top: -10px;*/
+			font-size: 0.9rem;
+		}
 
-    .quiz-choice-btn.disabled {
-      cursor: default;
-      pointer-events: none;
-    }
+		.home-link a {
+			color: #0288d1;
+			text-decoration: none;
+		}
 
-    .quiz-choice-correct-clicked {
-      background-color: #5bbefa;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 1px 1px 5px #808080;
-    }
+		.home-link a:hover {
+			text-decoration: underline;
+		}
 
-    .quiz-choice-wrong-clicked {
-      background-color: #fba24e;
-    }
+		/* 選択肢ボタン（quiz.html のスタイルに合わせる） */
+		.answers-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 15px;
+			margin-bottom: 25px;
+		}
 
-    .quiz-choice-correct-answer {
-      background-color: #5bbefa;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 1px 1px 5px #808080;
-    }
-  </style>
+		.quiz-choice-btn.answer-btn {
+			background: #ffffff;
+			border: 2px solid #b3e5fc;
+			border-radius: 12px;
+			padding: 18px;
+			font-size: 16px;
+			color: #01579b;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-weight: 500;
+			text-align: center;
+		}
+
+		.quiz-choice-btn.answer-btn:hover {
+			background: #e0f7ff;
+			border-color: #81d4fa;
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(33, 147, 176, 0.4);
+		}
+
+		.quiz-choice-btn.answer-btn.disabled {
+			cursor: default;
+			pointer-events: none;
+			opacity: 0.9;
+		}
+
+		/* 正解・不正解（ocean-theme と合わせて優先度強化） */
+		.quiz-choice-btn.answer-btn.quiz-choice-correct-clicked {
+			background-color: #00bfa5 !important;
+			border-color: #00bfa5 !important;
+			color: #ffffff !important;
+			font-weight: 700;
+			text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+		}
+
+		.quiz-choice-btn.answer-btn.quiz-choice-wrong-clicked {
+			background-color: #ff6f61 !important;
+			border-color: #ff6f61 !important;
+			color: #ffffff !important;
+		}
+
+		.quiz-choice-btn.answer-btn.quiz-choice-correct-answer {
+			background-color: #00bfa5 !important;
+			border-color: #00bfa5 !important;
+			color: #ffffff !important;
+			font-weight: 700;
+			text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+		}
+
+		/* スマホ調整 */
+		@media (max-width: 600px) {
+			.quiz-container {
+				padding: 24px;
+				margin: 0 10px;
+			}
+
+			.question-text {
+				font-size: 20px;
+			}
+
+			.quiz-choice-btn.answer-btn {
+				padding: 14px;
+				font-size: 14px;
+			}
+
+			.answers-grid {
+				gap: 10px;
+			}
+		}
+	</style>
 </head>
-<body class="bg-light">
 
-  <div class="container my-4">
+<body>
 
-    <!-- タイトル行＋HOMEへ戻る -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h1 class="mb-0">英単語4択クイズ（ログイン後）</h1>
-        <!-- ログイン中ユーザー名（必要なければこの行は削除してOK） -->
-        <p class="text-muted mb-0" th:if="${loginUser != null}">
-          ログイン中：<span th:text="${loginUser.name}">User Name</span>
-        </p>
-      </div>
-      <a class="btn btn-outline-secondary" th:href="@{/user/home}">
-        ユーザーHOMEへ戻る
-      </a>
-    </div>
+	<!-- 共通ユーザーヘッダー（ナビゲーション） -->
+	<div th:replace="~{fragments/user-header :: userHeader}"></div>
 
-    <!-- 説明文 -->
-    <p>次の英単語の意味として正しいものを1つ選んでください。</p>
+	<div class="content-wrap"><!--content-wrap-->
 
-    <!-- 問題文 -->
-    <h2 class="quiz-question" th:text="${questionWord.english}">today</h2>
+		<div class="quiz-container">
 
-    <!-- 正解の日本語（JavaScriptで参照するため hidden で保持） -->
-    <input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
+			<!-- ヘッダー -->
+			<div class="header">
+				<h1>🌊 英単語4択クイズ</h1>
+<!--				<p class="login-header-sub" th:if="${loginUser != null}">-->
+<!--					ログイン中：<span th:text="${loginUser.name}">User Name</span>-->
+<!--				</p>-->
+<!--				<p class="home-link">-->
+<!--					<a th:href="@{/user/home}">ユーザーHOMEへ戻る</a>-->
+<!--				</p>-->
+			</div>
 
-    <!-- 選択肢 -->
-    <div id="choices-container" class="mb-3">
-      <button
-        type="button"
-        class="quiz-choice-btn"
-        th:each="choice : ${choices}"
-        th:text="${choice}"
-        th:attr="data-choice=${choice}">
-        サンプル選択肢
-      </button>
-    </div>
+			<!-- プログレスバー（デザイン統一のため設置） -->
+			<div class="progress-bar">
+				<div class="progress-fill"></div>
+			</div>
 
-    <!-- 不正解時のみ表示する「次へ」ボタン -->
-    <div class="text-center">
-      <button
-        id="nextButton"
-        class="btn btn-primary"
-        type="button"
-        style="display: none;">
-        次へ
-      </button>
-    </div>
+			<!-- 問題文 -->
+			<div class="question-section">
+				<p class="question-text">
+					「<span th:text="${questionWord.english}">today</span>」の意味は？
+				</p>
+			</div>
 
-  </div>
+			<!-- 正解の日本語（JavaScript参照用） -->
+			<input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
 
-  <!-- Bootstrap の JavaScript（必要に応じて） -->
-  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+			<!-- 選択肢 -->
+			<div class="answers-grid" id="choices-container">
+				<button type="button" class="quiz-choice-btn answer-btn" th:each="choice : ${choices}"
+					th:text="${choice}" th:attr="data-choice=${choice}">
+					サンプル選択肢
+				</button>
+			</div>
 
-  <!-- クイズ用 JavaScript -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const correctJapaneseInput = document.getElementById("correctJapanese");
-      const correctJapanese = correctJapaneseInput ? correctJapaneseInput.value : "";
+			<!-- 不正解時のみ表示する「次へ」 -->
+			<div class="quiz-next-wrapper">
+				<button id="nextButton" class="quiz-next-button" type="button" style="display: none;">
+					次へ
+				</button>
+			</div>
+		</div>
 
-      const choiceButtons = document.querySelectorAll(".quiz-choice-btn");
-      const nextButton = document.getElementById("nextButton");
+	</div><!--content-wrap-->
 
-      let answered = false;
+	<!-- JS：クリック判定 -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const correctJapanese = document.getElementById("correctJapanese").value;
+			const choiceButtons = document.querySelectorAll(".quiz-choice-btn");
+			const nextButton = document.getElementById("nextButton");
 
-      choiceButtons.forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          if (answered) {
-            return;
-          }
-          answered = true;
+			let answered = false;
 
-          const selected = btn.getAttribute("data-choice");
+			choiceButtons.forEach(function (btn) {
+				btn.addEventListener("click", function () {
+					if (answered) return;
+					answered = true;
 
-          // 多重クリック防止
-          choiceButtons.forEach(function (b) {
-            b.classList.add("disabled");
-          });
+					const selected = btn.getAttribute("data-choice");
 
-          if (selected === correctJapanese) {
-            // 正解
-            btn.classList.add("quiz-choice-correct-clicked");
+					// 多重クリック禁止
+					choiceButtons.forEach((b) => b.classList.add("disabled"));
 
-            setTimeout(function () {
-              // ★ ログイン後版なので /user/quiz を再読込
-              window.location.href = "/user/quiz";
-            }, 1500);
-          } else {
-            // 不正解
-            btn.classList.add("quiz-choice-wrong-clicked");
+					if (selected === correctJapanese) {
+						// 正解
+						btn.classList.add("quiz-choice-correct-clicked");
 
-            // 正解の選択肢にだけ「正解」スタイルを付ける
-            choiceButtons.forEach(function (b) {
-              const value = b.getAttribute("data-choice");
-              if (value === correctJapanese) {
-                b.classList.add("quiz-choice-correct-answer");
-              }
-            });
+						setTimeout(() => {
+							window.location.href = "/user/quiz";
+						}, 1500);
 
-            // 「次へ」ボタンを表示し、ユーザー操作で次の問題へ
-            if (nextButton) {
-              nextButton.style.display = "inline-block";
-              nextButton.addEventListener("click", function () {
-                window.location.href = "/user/quiz";
-              });
-            }
-          }
-        });
-      });
-    });
-  </script>
+					} else {
+						// 不正解
+						btn.classList.add("quiz-choice-wrong-clicked");
+
+						choiceButtons.forEach((b) => {
+							if (b.getAttribute("data-choice") === correctJapanese) {
+								b.classList.add("quiz-choice-correct-answer");
+							}
+						});
+
+						nextButton.style.display = "inline-block";
+						nextButton.addEventListener("click", function () {
+							window.location.href = "/user/quiz";
+						});
+					}
+				});
+			});
+		});
+	</script>
 </body>
+
 </html>

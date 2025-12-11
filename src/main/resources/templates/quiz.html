@@ -1,130 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>英単語4択クイズ</title>
+  <title>英単語クイズ - Ocean</title>
 
-  <!-- 必要なら Bootstrap 等を読み込み -->
-  <!-- 例: <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ★ このページ専用の簡易スタイル -->
-  <style>
-    /* ページ全体の余白を少しだけ付ける */
-    body {
-      margin: 20px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    /* 問題の英単語（画像の "today" のイメージ） */
-    .quiz-question {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 16px;
-    }
-
-    /* 選択肢の共通スタイル（画像のような長方形のボックス） */
-    .quiz-choice-btn {
-      display: block;              /* 横幅いっぱいのブロック要素 */
-      width: 100%;
-      padding: 10px 14px;
-      margin-bottom: 8px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      background-color: #fff;
-      cursor: pointer;             /* マウスカーソルを「手」の形にする */
-      text-align: left;            /* 左寄せ */
-      box-sizing: border-box;
-    }
-
-    /* クリック後は多重クリックを防ぐために pointer-events を無効にする予定 */
-    .quiz-choice-btn.disabled {
-      cursor: default;
-      pointer-events: none;
-    }
-
-    /* 正解をクリックしたときの色（青） */
-    .quiz-choice-correct-clicked {
-      background-color: #5bbefa;   /* 青 */
-	  font-weight: 700;
-	  color: #fff;
-	  text-shadow: 1px 1px 5px #808080
-    }
-
-    /* 不正解としてクリックされたときの色（オレンジ） */
-    .quiz-choice-wrong-clicked {
-      background-color: #fba24e;   /* オレンジ */
-    }
-
-    /* 正解として表示する色（不正解時に、正解の欄を緑にする） */
-    .quiz-choice-correct-answer {
-      background-color: #5bbefa;   /* 緑 */
-	  font-weight: 700;
-	  color: #fff;
-	  text-shadow: 1px 1px 5px #808080
-    }
-
-    /* 「次へ」ボタンのラッパー（中央寄せ） */
-    .quiz-next-wrapper {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .quiz-next-button {
-      padding: 8px 20px;
-      font-size: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/ocean-theme.css}">
+  <!-- 必要であれば Bootstrap 読み込み（レイアウトには依存していない） -->
+  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+  
 </head>
 <body>
-  <h1>英単語4択クイズ（ログイン前）</h1>
+  <div class="quiz-container">
+    <!-- ヘッダー（タイトルなど） -->
+    <div class="header">
+      <h1>🌊 英単語クイズ</h1>
+      <p>次の英単語の意味として正しいものを1つ選んでください。</p>
+    </div>
 
-  <!-- ★ 今回の仕様では lastResultMessage は使わないので削除してあります。
-       （必要であれば、テキストメッセージをここに復活させることも可能です） -->
+    <!-- プログレスバー（現時点では見た目のみ） -->
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
 
-  <!-- 問題文 -->
-  <div>
-    <p>次の英単語の意味として正しいものを1つ選んでください。</p>
-    <h2 class="quiz-question" th:text="${questionWord.english}">today</h2>
+    <!-- 問題文表示エリア -->
+    <div class="question-section">
+      <p class="question-text">
+        「<span th:text="${questionWord.english}">today</span>」の意味は？
+      </p>
+    </div>
+
+    <!-- ★ 正解の日本語（JS 判定用） -->
+    <input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
+
+    <!-- 選択肢（2列グリッドで配置） -->
+    <div class="answers-grid" id="choices-container">
+      <!--
+        th:each で 4 つの選択肢を繰り返し表示する。
+        data-choice に、その選択肢の値（日本語）を埋め込んでおく。
+        JS は従来どおり class="quiz-choice-btn" を基準に動作する。
+      -->
+      <button
+        type="button"
+        class="answer-btn quiz-choice-btn"
+        th:each="choice : ${choices}"
+        th:text="${choice}"
+        th:attr="data-choice=${choice}">
+        サンプル選択肢
+      </button>
+    </div>
+
+    <!-- 不正解時のみ表示する「次へ」ボタン -->
+    <div class="quiz-next-wrapper">
+      <button
+        id="nextButton"
+        class="quiz-next-button"
+        type="button"
+        style="display: none;">
+        次へ
+      </button>
+    </div>
   </div>
 
-  <!--
-    ★ 正解の日本語を、JavaScript が参照できる場所に hidden で埋め込んでおく。
-       これを使ってブラウザ側で正誤判定を行う。
-  -->
-  <input type="hidden" id="correctJapanese" th:value="${correctJapanese}" />
-
-  <!-- 選択肢（ラジオボタンではなく、クリック可能なボックスにする） -->
-  <div id="choices-container">
-    <!--
-      th:each で 4 つの選択肢を繰り返し表示する。
-      data-choice に、その選択肢の値（日本語）を埋め込んでおく。
-    -->
-    <button
-      type="button"
-      class="quiz-choice-btn"
-      th:each="choice : ${choices}"
-      th:text="${choice}"
-      th:attr="data-choice=${choice}">
-      サンプル選択肢
-    </button>
-  </div>
-
-  <!-- 不正解時にだけ表示する「次へ」ボタン（初期状態は非表示） -->
-  <div class="quiz-next-wrapper">
-    <button
-      id="nextButton"
-      class="quiz-next-button"
-      type="button"
-      style="display: none;">
-      次へ
-    </button>
-  </div>
-
-
-
-
-
-  <!-- ★ クイズ用の JavaScript -->
+  <!-- ★ クイズ用の JavaScript（ロジックは従来どおり） -->
   <script>
     // ページの読み込みが完了したら処理を開始
     document.addEventListener("DOMContentLoaded", function () {
@@ -159,22 +98,22 @@
 
           if (selected === correctJapanese) {
             // ★ 正解をクリックした場合：
-            //   - クリックしたボタンを青くする
-            //   - 1秒後に次の問題へ（/quiz へ遷移）
+            //   - クリックしたボタンを正解色にする
+            //   - 1.5秒後に次の問題へ（/quiz へ遷移）
             btn.classList.add("quiz-choice-correct-clicked");
 
             setTimeout(function () {
               // 次の問題を表示（GET /quiz）
               window.location.href = "/quiz";
-            }, 1500); // 1000ミリ秒 = 1秒
+            }, 1500);
           } else {
             // ★ 不正解をクリックした場合：
-            //   - クリックしたボタンをオレンジ色に
-            //   - 正解のボタンを緑色に
+            //   - クリックしたボタンを不正解色に
+            //   - 正解のボタンを正解色に
             //   - 「次へ」ボタンを表示し、ユーザー操作を待つ
             btn.classList.add("quiz-choice-wrong-clicked");
 
-            // 正解の選択肢にだけ「正解（緑）」のクラスを付ける
+            // 正解の選択肢にだけ「正解」のクラスを付ける
             choiceButtons.forEach(function (b) {
               const value = b.getAttribute("data-choice");
               if (value === correctJapanese) {

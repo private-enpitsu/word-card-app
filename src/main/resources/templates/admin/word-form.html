@@ -3,53 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <title>単語 新規登録（管理者用）</title>
+
+  <!-- Bootstrap と独自CSS -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
-<body>
-	<!-- word.id が null なら「新規」、それ以外なら「編集」と表示する -->
-	<h1 th:text="${word.id} == null ? '単語 新規登録（管理者用）' : '単語 編集（管理者用）'">
-		単語 新規登録（管理者用）
-	</h1>
+<body class="bg-light">
+  <div class="container my-4" style="max-width: 720px;">
 
-  <!--
-    th:object で "word" オブジェクト（AdminWordController から渡される）をフォームの対象にする。
-    th:field="*{プロパティ名}" で、Word クラスのフィールドと入力項目を結びつける。
-  -->
-  <!--
-    word.id が null の場合: 新規登録 → POST /admin/words
-    word.id が null でない場合: 編集 → POST /admin/words/{id}
-  -->
-  <form th:action="${word.id} == null ? @{/admin/words} : @{/admin/words/{id}(id=${word.id})}" th:object="${word}" method="post">
-	
-    <!-- 英単語の入力欄 -->
-    <div>
-      <label for="english">英単語：</label>
-      <!-- Word.english フィールドに対応 -->
-      <input type="text" id="english" th:field="*{english}" />
+    <!-- タイトル：新規 or 編集 -->
+    <h1 class="h4 mb-4"
+        th:text="${word.id} == null ? '単語 新規登録（管理者用）' : '単語 編集（管理者用）'">
+      単語 新規登録（管理者用）
+    </h1>
+
+    <!-- フォームカード -->
+    <div class="card">
+      <div class="card-body">
+
+        <!--
+          th:object で "word" オブジェクト（AdminWordController から渡される）をフォームの対象にする。
+          th:field="*{プロパティ名}" で、Word クラスのフィールドと入力項目を結びつける。
+          word.id が null の場合: 新規登録 → POST /admin/words
+          word.id が null でない場合: 編集 → POST /admin/words/{id}
+        -->
+        <form th:action="${word.id} == null ? @{/admin/words} : @{/admin/words/{id}(id=${word.id})}"
+              th:object="${word}"
+              method="post">
+
+          <!-- 英単語 -->
+          <div class="mb-3">
+            <label for="english" class="form-label">英単語：</label>
+            <input type="text"
+                   id="english"
+                   th:field="*{english}"
+                   class="form-control" />
+            <!-- 英単語のバリデーションエラー -->
+            <div th:if="${#fields.hasErrors('english')}"
+                 th:errors="*{english}"
+                 class="form-text text-danger">
+              英単語のエラーメッセージ
+            </div>
+          </div>
+
+          <!-- 日本語 -->
+          <div class="mb-3">
+            <label for="japanese" class="form-label">日本語：</label>
+            <input type="text"
+                   id="japanese"
+                   th:field="*{japanese}"
+                   class="form-control" />
+            <!-- 日本語のバリデーションエラー -->
+            <div th:if="${#fields.hasErrors('japanese')}"
+                 th:errors="*{japanese}"
+                 class="form-text text-danger">
+              日本語のエラーメッセージ
+            </div>
+          </div>
+
+          <!-- 送信ボタン -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              登録
+            </button>
+            <a th:href="@{/admin/words}" class="btn btn-outline-secondary">
+              一覧に戻る
+            </a>
+          </div>
+        </form>
+
+      </div>
     </div>
 
-	<!-- 英単語に関するエラーメッセージを表示 --><!-- バリデーションエラー時のメッセージ（例：英単語は必須です）がここに入る -->
-	<div th:if="${#fields.hasErrors('english')}" th:errors="*{english}" style="color: red;"></div>
+  </div>
 
-    <!-- 日本語の入力欄 -->
-    <div>
-      <label for="japanese">日本語：</label>
-      <!-- Word.japanese フィールドに対応 -->
-      <input type="text" id="japanese" th:field="*{japanese}" />
-    </div>
-
-	<!-- 日本語に関するエラーメッセージを表示 --><!-- 例：日本語は必須です -->
-	<div th:if="${#fields.hasErrors('japanese')}" th:errors="*{japanese}" style="color: red;"></div>
-
-	
-    <!-- 送信ボタン -->
-    <div>
-      <button type="submit">登録</button>
-    </div>
-  </form>
-
-  <!-- 一覧画面への戻りリンク -->
-  <p>
-    <a th:href="@{/admin/words}">一覧に戻る</a>
-  </p>
+  <!-- Bootstrap の JavaScript -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

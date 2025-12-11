@@ -1,102 +1,96 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>英単語カード（単語暗記）</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>英単語カード（単語暗記） - Ocean</title>
 
-  <!-- Bootstrap と共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+	<!-- Ocean 共通テーマCSS -->
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
 </head>
-<body class="bg-light">
 
-  <div class="container my-4">
+<body>
 
-    <!-- タイトル＋ユーザーHOMEへのリンク -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h1 class="mb-0">英単語カード（単語暗記）</h1>
-        <!-- ログイン中ユーザー名（必要なければこの行は削除してもOK） -->
-        <p class="text-muted mb-0" th:if="${loginUser != null}">
-          ログイン中：<span th:text="${loginUser.name}">User Name</span>
-        </p>
-      </div>
-      <a class="btn btn-outline-secondary" th:href="@{/user/home}">
-        ユーザーHOMEへ戻る
-      </a>
-    </div>
+	<!-- 共通ユーザーヘッダー（ナビゲーション） -->
+	<div th:replace="~{fragments/user-header :: userHeader}"></div>
 
-    <!-- 説明文 -->
-    <p class="mb-4">
-      ランダムに表示される英単語を暗記するページです。<br />
-      「めくる」ボタンで日本語が表示され、「次へ」で別の単語に進みます。
-    </p>
+	<div class="content-wrap"><!--content-wrap-->
 
-    <!-- カード本体 -->
-    <div class="row justify-content-center">
-      <div class="col-md-6">
+		<div class="quiz-container">
+			<!-- ヘッダー：タイトル＋ログイン中ユーザー＋HOMEリンク -->
+			<div class="header">
+				<div style="margin-bottom: 8px;">
+					<h1>🌊 暗記カード</h1>
+					<!--        <p th:if="${loginUser != null}"-->
+					<!--           style="font-size: 0.9rem; color: #666; margin-top: 4px;">-->
+					<!--          ログイン中：-->
+					<!--          <span th:text="${loginUser.name}">User Name</span>-->
+					<!--        </p>-->
+				</div>
+				<!--      <p style="margin-top: 8px;">-->
+				<!--        <a th:href="@{/user/home}"-->
+				<!--           style="font-size: 0.9rem; color: #0288d1; text-decoration: none;">-->
+				<!--          ユーザーHOMEへ戻る-->
+				<!--        </a>-->
+				<!--      </p>-->
+			</div>
 
-        <div class="card shadow-sm">
-          <div class="card-body text-center">
+			<!-- 説明文 -->
+			<p style="margin-bottom: 20px; color: #444; font-size: 0.95rem; text-align: center;">
+				ランダムに表示される英単語を暗記するページです。<br />
+				「めくる」ボタンで日本語が表示され、「次へ」で別の単語に進みます。
+			</p>
 
-            <!-- 英単語（常に表示） -->
-            <p class="text-muted mb-1">英単語</p>
-            <h2 class="display-5 fw-bold" th:text="${cardWord.english}">example</h2>
+			<!-- カード本体（Ocean の question-section を流用） -->
+			<div class="question-section">
+				<div>
+					<!-- 英単語（常に表示） -->
+					<p style="color: #666; margin-bottom: 8px;">英単語</p>
+					<p class="question-text" th:text="${cardWord.english}">example</p>
 
-            <hr />
+					<!-- 日本語（初期状態は非表示／めくるボタンで表示） -->
+					<div id="answerArea" style="margin-top: 16px; display: none;">
+						<p style="color: #666; margin-bottom: 4px;">日本語</p>
+						<p style="font-size: 22px; color: #01579b; margin: 0;" th:text="${cardWord.japanese}">
+							例
+						</p>
+					</div>
+				</div>
+			</div>
 
-            <!-- 日本語（初期状態は非表示／めくるボタンで表示） -->
-            <div id="answerArea" class="mt-3 d-none">
-              <p class="text-muted mb-1">日本語</p>
-              <p class="fs-4 mb-0" th:text="${cardWord.japanese}">例</p>
-            </div>
+			<!-- ボタンエリア（めくる／次へ） -->
+			<div class="quiz-next-wrapper" style="display: flex; gap: 12px; margin-top: 0;">
+				<!-- めくる（答えを表示） -->
+				<button id="revealButton" type="button" class="quiz-next-button" style="width: 50%;">
+					めくる（答えを表示）
+				</button>
 
-          </div>
+				<!-- 次へ：常に表示（新しい単語へ） -->
+				<a th:href="@{/user/cards}" class="quiz-next-button"
+					style="width: 50%; text-align: center; display: inline-block;">
+					次へ
+				</a>
+			</div>
+		</div>
+	</div><!--content-wrap-->
 
-          <!-- カード下部のボタン -->
-          <div class="card-footer bg-white">
-            <div class="d-flex justify-content-between">
-              <!-- 答えを表示（めくる） -->
-              <button
-                id="revealButton"
-                type="button"
-                class="btn btn-outline-primary">
-                めくる（答えを表示）
-              </button>
+	<!-- めくるボタン用のシンプルなJavaScript -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const revealButton = document.getElementById("revealButton");
+			const answerArea = document.getElementById("answerArea");
 
-              <!-- 次へ：常に表示 -->
-              <a
-                th:href="@{/user/cards}"
-                class="btn btn-primary">
-                次へ
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Bootstrap の JavaScript -->
-  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-
-  <!-- めくるボタン用のシンプルなJavaScript -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const revealButton = document.getElementById("revealButton");
-      const answerArea = document.getElementById("answerArea");
-
-      if (revealButton && answerArea) {
-        revealButton.addEventListener("click", function () {
-          // 日本語の答えを表示
-          answerArea.classList.remove("d-none");
-          // ボタンは一度押したら無効化（連打防止）
-          revealButton.disabled = true;
-        });
-      }
-    });
-  </script>
+			if (revealButton && answerArea) {
+				revealButton.addEventListener("click", function () {
+					// 日本語の答えを表示
+					answerArea.style.display = "block";
+					// ボタンは一度押したら無効化（連打防止）
+					revealButton.disabled = true;
+				});
+			}
+		});
+	</script>
 </body>
+
 </html>

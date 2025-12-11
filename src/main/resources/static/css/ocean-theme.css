@@ -1,0 +1,222 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+	min-height: 100vh;
+/*	display: flex;*/
+/*	justify-content: center;*/
+	align-items: center;
+	padding: 20px;
+}
+
+
+.content-wrap{
+	display: flex;
+	justify-content: center;
+}
+
+
+.quiz-container {
+	background: #ffffff;
+	border-radius: 20px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	padding: 40px;
+	max-width: 600px;
+	width: 100%;
+	animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.header {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.header h1 {
+	color: #2193b0;
+	font-size: 28px;
+	margin-bottom: 10px;
+}
+
+.header p {
+	color: #666666;
+	font-size: 14px;
+}
+
+.progress-bar {
+	height: 8px;
+	background: #e1f5fe;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	overflow: hidden;
+}
+
+.progress-fill {
+	height: 100%;
+	background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+	width: 100%;
+	/* ★ 進捗ロジックは未実装なので全体表示（あとでJS対応可） */
+	border-radius: 10px;
+}
+
+.question-section {
+	background: linear-gradient(135deg, #e0f7ff 0%, #b3e5fc 100%);
+	border-radius: 15px;
+	padding: 30px;
+	margin-bottom: 30px;
+	min-height: 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.question-text {
+	font-size: 24px;
+	color: #01579b;
+	font-weight: 600;
+}
+
+/* 4択ボタンのレイアウト（2列グリッド） */
+.answers-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 15px;
+	margin-bottom: 25px;
+}
+
+/* 実際にクリックされるボタン。
+      既存クラス quiz-choice-btn を残しつつ
+      新しい見た目用の answer-btn を追加している */
+.answer-btn.quiz-choice-btn {
+	background: #ffffff;
+	border: 2px solid #b3e5fc;
+	border-radius: 12px;
+	padding: 20px;
+	font-size: 16px;
+	color: #01579b;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-weight: 500;
+	text-align: center;
+}
+
+.answer-btn.quiz-choice-btn:hover {
+	background: #e0f7ff;
+/*	color: #ffffff;*/
+	border-color: #e0f7ff;
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(33, 147, 176, 0.4);
+}
+
+.answer-btn.quiz-choice-btn:active {
+	transform: translateY(0);
+}
+
+/* JS から付与される既存の状態クラスを、Ocean 風の色に合わせる */
+.quiz-choice-btn.disabled {
+	cursor: default;
+	pointer-events: none;
+	opacity: 0.9;
+}
+
+/* ------------------------------------------------------------
+   必ず反映されるクリック時の色変化（優先度を最大化）
+   .answer-btn.quiz-choice-btn が強いため、この指定が必要
+------------------------------------------------------------- */
+
+/* 正解クリック（クリックしたボタン） */
+.answer-btn.quiz-choice-btn.quiz-choice-correct-clicked {
+	background-color: #00bfa5 !important;
+	border-color: #00bfa5 !important;
+	color: #ffffff !important;
+	font-weight: 700;
+	text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+}
+
+/* 不正解クリック */
+.answer-btn.quiz-choice-btn.quiz-choice-wrong-clicked {
+	background-color: #ff6f61 !important;
+	border-color: #ff6f61 !important;
+	color: #ffffff !important;
+}
+
+/* 不正解のときに正解の欄を表示（ハイライト） */
+.answer-btn.quiz-choice-btn.quiz-choice-correct-answer {
+	background-color: #00bfa5 !important;
+	border-color: #00bfa5 !important;
+	color: #ffffff !important;
+	font-weight: 700;
+	text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+}
+
+.quiz-next-wrapper {
+	margin-top: 10px;
+	text-align: center;
+}
+
+/* 「次へ」ボタンも Ocean 風のスタイルに揃える */
+.quiz-next-button {
+	width: 100%;
+	background: #e0f7ff;
+	border: 2px solid #b3e5fc;
+	border-radius: 12px;
+	padding: 15px;
+	font-size: 16px;
+	color: #0288d1;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-weight: 500;
+}
+
+.quiz-next-button:hover {
+	background: #e1f5fe;
+	border-color: #4fc3f7;
+	color: #01579b;
+}
+
+/* ---------------------------------------------
+   追加レスポンシブ：スマホ時にレイアウト最適化
+----------------------------------------------*/
+
+/* スマホ (最大幅600px) のとき */
+@media (max-width: 600px) {
+
+  /* 全体のカードを少し小さめにする */
+  .quiz-container {
+    padding: 20px;
+    margin: 0 10px;
+  }
+
+  /* 問題文の文字を少し小さく */
+  .question-text {
+    font-size: 20px;
+  }
+
+  /* ボタンの文字と余白を調整 */
+  .answer-btn.quiz-choice-btn {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  /* グリッド間のスペースを少し減らす */
+  .answers-grid {
+    gap: 10px;
+  }
+}

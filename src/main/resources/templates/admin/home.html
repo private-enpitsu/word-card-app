@@ -4,62 +4,72 @@
   <meta charset="UTF-8" />
   <title>管理者HOME - 英単語カードアプリ</title>
 
-  <!-- 必要ならCSSを読み込む -->
-  <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
-  <!-- <link rel="stylesheet" th:href="@{/css/style.css}" /> -->
+  <!-- Bootstrap と独自CSS -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
 
   <style>
+    /* 必要ならこのページ専用の微調整だけここに書く */
     body {
-      margin: 20px;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 12px;
-    }
-    .menu {
-      margin-top: 16px;
-      padding-left: 0;
-      list-style: none;
-    }
-    .menu li {
-      margin-bottom: 8px;
     }
   </style>
 </head>
-<body>
-  <div class="container">
+<body class="bg-light">
+  <div class="container my-4" style="max-width: 720px;">
+
     <!-- ログイン中管理者名の表示 -->
-    <h1>
-      管理者HOME：
-      <span th:text="${loginAdmin.name}">管理者名</span>
-      さん
-    </h1>
+    <div class="mb-4">
+      <h1 class="h4 mb-2">
+        管理者HOME：
+        <span th:text="${loginAdmin.name}">管理者名</span>
+        さん
+      </h1>
+      <p class="text-muted mb-0">管理者用メニューです。</p>
+    </div>
 
-    <p>管理者用メニューです。</p>
+    <!-- 管理者メニューカード -->
+    <div class="card">
+      <div class="card-header">
+        メニュー
+      </div>
+      <ul class="list-group list-group-flush">
+        <!-- 既存の単語一覧（CRUD）の入口 -->
+        <li class="list-group-item">
+          <a th:href="@{/admin/words}" class="text-decoration-none">
+            単語一覧（CRUD・検索・ページネーション）
+          </a>
+        </li>
 
-    <ul class="menu">
-      <!-- 既存の単語一覧（CRUD）の入口 -->
-      <li>
-        <a th:href="@{/admin/words}">単語一覧（CRUD・検索・ページネーション）</a>
-      </li>
-      <!-- 必要なら直接「新規登録」へのリンクも置けます -->
-      <!-- <li><a th:href="@{/admin/words/new}">単語の新規登録</a></li> -->
+        <!-- 必要なら直接「新規登録」へのリンクも置けます -->
+        <!--
+        <li class="list-group-item">
+          <a th:href="@{/admin/words/new}" class="text-decoration-none">
+            単語の新規登録
+          </a>
+        </li>
+        -->
 
-      <!-- ログアウト（ユーザーと共通の /logout を使用） -->
-      <li>
-        <a th:href="@{/logout}">ログアウト</a>
-      </li>
+        <!-- ログアウト（ユーザーと共通の /logout を使用） -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>管理者セッションを終了する</span>
+          <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">
+            ログアウト
+          </a>
+        </li>
 
-      <!-- トップページ -->
-      <li>
-        <a th:href="@{/}">トップページに戻る</a>
-      </li>
-    </ul>
+        <!-- トップページ -->
+        <li class="list-group-item">
+          <a th:href="@{/}" class="text-decoration-none">
+            トップページに戻る
+          </a>
+        </li>
+      </ul>
+    </div>
+
   </div>
+
+  <!-- Bootstrap の JavaScript（必要なら） -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
