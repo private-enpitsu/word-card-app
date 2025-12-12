@@ -8,6 +8,7 @@
 
 	<!-- Ocean 共通テーマCSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 </head>
 
 <body>
@@ -47,10 +48,20 @@
 				<div>
 					<!-- 英単語（常に表示） -->
 					<p style="color: #666; margin-bottom: 8px;">英単語</p>
-					<p class="question-text" th:text="${cardWord.english}">example</p>
+					<p id="question-word" class="question-text" th:text="${cardWord.english}">example</p>
+					
+					<button type="button" onclick="speakElement('#question-word')"
+						style="width: 7%;
+					    		border: none;
+					    		background-color: transparent;
+								position: absolute;
+								right: 18px;
+								bottom: 11px;">
+						<span><img class="onsei-img" th:src="@{/images/icon_onsei_1.png}" style="width: 100%;"></span>
+					</button>
 
 					<!-- 日本語（初期状態は非表示／めくるボタンで表示） -->
-					<div id="answerArea" style="margin-top: 16px; display: none;">
+					<div id="answerArea" style="margin-top: 34px; display: none;">
 						<p style="color: #666; margin-bottom: 4px;">日本語</p>
 						<p style="font-size: 22px; color: #01579b; margin: 0;" th:text="${cardWord.japanese}">
 							例
@@ -63,7 +74,7 @@
 			<div class="quiz-next-wrapper" style="display: flex; gap: 12px; margin-top: 0;">
 				<!-- めくる（答えを表示） -->
 				<button id="revealButton" type="button" class="quiz-next-button" style="width: 50%;">
-					めくる（答えを表示）
+					めくる
 				</button>
 
 				<!-- 次へ：常に表示（新しい単語へ） -->
@@ -85,12 +96,56 @@
 				revealButton.addEventListener("click", function () {
 					// 日本語の答えを表示
 					answerArea.style.display = "block";
+					
+					playMekuruSound();   // めくる音
+					
 					// ボタンは一度押したら無効化（連打防止）
 					revealButton.disabled = true;
 				});
 			}
 		});
+		
+		
+		{
+			// tts.js
+			// 指定したセレクタの要素内テキストを読み上げる関数
+
+			function speakElement(selector) {
+			  // ブラウザが TTS に対応しているかチェック
+			  if (!('speechSynthesis' in window)) {
+			    alert('このブラウザは読み上げに対応していません');
+			    return;
+			  }
+
+			  const el = document.querySelector(selector);
+			  if (!el) {
+			    console.warn('要素が見つかりません: ' + selector);
+			    return;
+			  }
+
+			  // タグの中の文字だけを取得（HTMLタグは除外）
+			  const text = el.textContent.trim();
+			  if (!text) {
+			    console.warn('読み上げるテキストがありません');
+			    return;
+			  }
+
+			  // 前の読み上げが残っていたら止める
+			  speechSynthesis.cancel();
+
+			  const utterance = new SpeechSynthesisUtterance(text);
+			  utterance.lang = 'en-US'; // 英語
+			  utterance.rate = 0.9;     // 速度（お好みで調整可）
+
+			  speechSynthesis.speak(utterance);
+			}
+		}
+		
 	</script>
+	
+	<!-- めくる音 -->
+	<audio id="mekuruSound" th:src="@{/sounds/mekuru.mp3}"></audio>
+	<script th:src="@{/js/quiz-sound.js}"></script>
 </body>
 
 </html>

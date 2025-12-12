@@ -8,6 +8,7 @@
 
 	<!-- Ocean テーマCSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 	<style>
 		/* ログイン後クイズ特有の少しだけ追加スタイル */
@@ -134,8 +135,20 @@
 			<!-- 問題文 -->
 			<div class="question-section">
 				<p class="question-text">
-					「<span th:text="${questionWord.english}">today</span>」の意味は？
+<!--					「<span th:text="${questionWord.english}">today</span>」の意味は？-->
+					<span id="question-word" th:text="${questionWord.english}">today</span>
 				</p>
+				
+				<button type="button" onclick="speakElement('#question-word')"
+					style="width: 7%;
+				    		border: none;
+				    		background-color: transparent;
+							position: absolute;
+							right: 18px;
+							bottom: 11px;">
+					<span><img class="onsei-img" th:src="@{/images/icon_onsei_1.png}" style="width: 100%;"></span>
+				</button>
+				
 			</div>
 
 			<!-- 正解の日本語（JavaScript参照用） -->
@@ -156,7 +169,9 @@
 				</button>
 			</div>
 		</div>
+		
 
+		
 	</div><!--content-wrap-->
 
 	<!-- JS：クリック判定 -->
@@ -180,6 +195,9 @@
 
 					if (selected === correctJapanese) {
 						// 正解
+						
+						playCorrectSound();   // 正解音
+						
 						btn.classList.add("quiz-choice-correct-clicked");
 
 						setTimeout(() => {
@@ -188,6 +206,9 @@
 
 					} else {
 						// 不正解
+						
+						playWrongSound();     // 不正解音
+						
 						btn.classList.add("quiz-choice-wrong-clicked");
 
 						choiceButtons.forEach((b) => {
@@ -204,7 +225,48 @@
 				});
 			});
 		});
+		
+		
+		{
+			// tts.js
+			// 指定したセレクタの要素内テキストを読み上げる関数
+
+			function speakElement(selector) {
+			  // ブラウザが TTS に対応しているかチェック
+			  if (!('speechSynthesis' in window)) {
+			    alert('このブラウザは読み上げに対応していません');
+			    return;
+			  }
+
+			  const el = document.querySelector(selector);
+			  if (!el) {
+			    console.warn('要素が見つかりません: ' + selector);
+			    return;
+			  }
+
+			  // タグの中の文字だけを取得（HTMLタグは除外）
+			  const text = el.textContent.trim();
+			  if (!text) {
+			    console.warn('読み上げるテキストがありません');
+			    return;
+			  }
+
+			  // 前の読み上げが残っていたら止める
+			  speechSynthesis.cancel();
+
+			  const utterance = new SpeechSynthesisUtterance(text);
+			  utterance.lang = 'en-US'; // 英語
+			  utterance.rate = 0.9;     // 速度（お好みで調整可）
+
+			  speechSynthesis.speak(utterance);
+			}
+		}
 	</script>
+	
+	<!-- クイズ正誤音 -->
+	<audio id="correctSound" th:src="@{/sounds/correct.mp3}"></audio>
+	<audio id="wrongSound" th:src="@{/sounds/wrong.mp3}"></audio>
+	<script th:src="@{/js/quiz-sound.js}"></script>
 </body>
 
 </html>

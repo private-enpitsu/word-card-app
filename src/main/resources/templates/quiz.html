@@ -8,13 +8,56 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}">
-	<!-- 必要であれば Bootstrap 読み込み（レイアウトには依存していない） -->
-	<!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" /> -->
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 </head>
 
 <body>
 
+	
+	  <!--
+	    ユーザー共通ヘッダー（ログイン後画面用）
+	    - ログイン中ユーザー名の表示
+	    - 画面上部のナビゲーションメニュー
+	    - デザインは Ocean テーマに合わせた、シンプルな水平メニュー
+	    - スマホでは横幅が足りなくなったら自然に折り返す（ハンバーガー無し）
+	  -->
+	  
+
+	  <div th:fragment="userHeader">
+		
+		<style>
+		div .user-header {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px 16px;
+			padding: 18px 27px;
+	/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */
+			font-size: 0.9rem;
+			position: absolute;
+			width: 100%;
+			min-height: 94px;
+		}
+		</style>
+
+	    <div class="user-header"><!--header-->
+	      <div style="display: flex; flex-direction: column; gap: 4px;">
+	        <span>
+				<a th:href="@{/}"  style="color: #fff; font-size: 1.3rem; text-decoration: none;">
+	          		FLASHCARD
+			  	</a>
+	        </span>
+	      </div>
+
+	      <nav><!-- 右側：ナビゲーションメニュー -->
+	      </nav>
+	    </div>
+	  </div>
+
+	  
+	  
 	<div class="content-wrap"><!--content-wrap-->
 		<div class="quiz-container">
 			<!-- ヘッダー（タイトルなど） -->
@@ -94,6 +137,9 @@
 					});
 
 					if (selected === correctJapanese) {
+						
+						playCorrectSound();   // 正解音
+						
 						// ★ 正解をクリックした場合：
 						//   - クリックしたボタンを正解色にする
 						//   - 1.5秒後に次の問題へ（/quiz へ遷移）
@@ -104,6 +150,9 @@
 							window.location.href = "/quiz";
 						}, 1500);
 					} else {
+						
+						playWrongSound();     // 不正解音
+						
 						// ★ 不正解をクリックした場合：
 						//   - クリックしたボタンを不正解色に
 						//   - 正解のボタンを正解色に
@@ -132,6 +181,12 @@
 			});
 		});
 	</script>
+	
+	
+	<!-- クイズ正誤音 -->
+	<audio id="correctSound" th:src="@{/sounds/correct.mp3}"></audio>
+	<audio id="wrongSound" th:src="@{/sounds/wrong.mp3}"></audio>
+	<script th:src="@{/js/quiz-sound.js}"></script>
 </body>
 
 </html>

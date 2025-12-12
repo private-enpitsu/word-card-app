@@ -21,7 +21,7 @@
 		.login-box {
 			background: rgba(255, 255, 255, 0.98);
 			border-radius: 16px;
-			padding: 24px 24px 20px;
+			padding: 36px;
 			box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
 			margin-top: 8px;
 		}
@@ -67,7 +67,7 @@
 		}
 
 		.login-button-row {
-			margin-top: 10px;
+			margin-top: 32px;
 			margin-bottom: 8px;
 		}
 
@@ -78,7 +78,7 @@
 
 		.login-footer-link {
 			text-align: center;
-			margin-top: 4px;
+			margin-top: 26px;
 			font-size: 0.9rem;
 		}
 
@@ -115,6 +115,46 @@
 </head>
 
 <body>
+	
+	  <!--
+	    ユーザー共通ヘッダー（ログイン後画面用）
+	    - ログイン中ユーザー名の表示
+	    - 画面上部のナビゲーションメニュー
+	    - デザインは Ocean テーマに合わせた、シンプルな水平メニュー
+	    - スマホでは横幅が足りなくなったら自然に折り返す（ハンバーガー無し）
+	  -->
+	  <div th:fragment="userHeader">
+		
+		<style>
+		div .user-header {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px 16px;
+			padding: 18px 27px;
+	/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */
+			font-size: 0.9rem;
+			position: absolute;
+			width: 100%;
+			min-height: 94px;
+		}
+		</style>
+
+	    <div class="user-header"><!--header-->
+	      <div style="display: flex; flex-direction: column; gap: 4px;">
+	        <span>
+				<a th:href="@{/}"  style="color: #fff; font-size: 1.3rem; text-decoration: none;">
+	          		FLASHCARD
+			  	</a>
+	        </span>
+	      </div>
+
+	      <nav><!-- 右側：ナビゲーションメニュー -->
+	      </nav>
+	    </div>
+	  </div>
+	  
 	<div class="content-wrap"><!--content-wrap-->
 		<div class="quiz-container">
 			<!-- ヘッダー -->
@@ -154,9 +194,9 @@
 					</div>
 				</form>
 
-				<div class="login-footer-link">
-					<a th:href="@{/}">トップへ戻る</a>
-				</div>
+<!--				<div class="login-footer-link">-->
+<!--					<a th:href="@{/}">トップへ戻る</a>-->
+<!--				</div>-->
 			</div>
 		</div>
 	</div>

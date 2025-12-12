@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ユーザー登録</title>
 
-    <!-- Bootstrap 削除 → Ocean テーマ + このページ用CSS -->
+
     <link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
     <style>
         /* ここから先は「元の class 名」をそのまま使ってデザインだけ Ocean 風にする */
@@ -15,9 +16,6 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
 
@@ -156,8 +154,57 @@
     </style>
 </head>
 <body>
+	
+	
+	
+	  <!--
+	    ユーザー共通ヘッダー（ログイン後画面用）
+	    - ログイン中ユーザー名の表示
+	    - 画面上部のナビゲーションメニュー
+	    - デザインは Ocean テーマに合わせた、シンプルな水平メニュー
+	    - スマホでは横幅が足りなくなったら自然に折り返す（ハンバーガー無し）
+	  -->
+	  <div th:fragment="userHeader">
+		
+		<style>
+		div .user-header {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px 16px;
+			padding: 18px 27px;
+	/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */
+			font-size: 0.9rem;
+			position: absolute;
+			width: 100%;
+			min-height: 94px;
+		}
+		</style>
+
+	    <div class="user-header"><!--header-->
+	      <div style="display: flex; flex-direction: column; gap: 4px;">
+	        <span>
+				<a th:href="@{/}"  style="color: #fff; font-size: 1.3rem; text-decoration: none;">
+	          		FLASHCARD
+			  	</a>
+	        </span>
+	      </div>
+
+	      <nav><!-- 右側：ナビゲーションメニュー -->
+	      </nav>
+	    </div>
+	  </div>
+	
+	
+	<div class="content-wrap"><!--content-wrap-->
 <div class="container my-4">
 
+	
+	
+
+	
+	
     <h1 class="mb-4">ユーザー登録</h1>
 
     <!-- ユーザー登録フォーム -->
@@ -223,5 +270,7 @@
     </div>
 
 </div>
+</div>
+
 </body>
 </html>
