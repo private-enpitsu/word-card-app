@@ -156,23 +156,18 @@
 					<!-- 英単語カード -->
 					<li>
 						<a th:href="@{/user/cards}" class="menu-link-text">
-							暗記カード（めくって暗記）
+							暗記カード
 						</a>
 					</li>
 
-					<!-- 単語一覧 -->
+					<!-- 英単語入力クイズ -->
 					<li>
-						<a th:href="@{/user/words}" class="menu-link-text">
-							単語一覧
+						<a th:href="@{/user/input-quiz}" class="menu-link-text">
+							英単語入力クイズ
 						</a>
 					</li>
+					
 
-					<!-- トップページへ -->
-<!--					<li>-->
-<!--						<a th:href="@{/}" class="menu-link-text">-->
-<!--							トップページに戻る-->
-<!--						</a>-->
-<!--					</li>-->
 				</ul>
 
 				<!-- ログアウト -->
@@ -182,6 +177,12 @@
 					<a th:href="@{/logout}" class="logout-button">
 						ログアウト
 					</a>
+					
+					<!-- 単語一覧 -->
+					<a th:href="@{/user/words}" class="menu-link-text">
+						単語一覧
+					</a>
+
 				</div>
 			</div>
 		</div>

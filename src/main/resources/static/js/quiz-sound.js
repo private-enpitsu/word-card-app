@@ -27,6 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
     mekuruAudio.currentTime = 0;    // 毎回頭から再生する
     mekuruAudio.play();
   };
-  
+
   
 });
