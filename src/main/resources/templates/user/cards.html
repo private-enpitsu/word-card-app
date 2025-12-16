@@ -8,6 +8,7 @@
 
 	<!-- Ocean 共通テーマCSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 </head>
 
@@ -22,7 +23,7 @@
 			<!-- ヘッダー：タイトル＋ログイン中ユーザー＋HOMEリンク -->
 			<div class="header">
 				<div style="margin-bottom: 8px;">
-					<h1>🌊 暗記カード</h1>
+					<h1><img th:src="@{/images/flashcard_icon.png}" alt="icon">暗記カード</h1>
 					<!--        <p th:if="${loginUser != null}"-->
 					<!--           style="font-size: 0.9rem; color: #666; margin-top: 4px;">-->
 					<!--          ログイン中：-->

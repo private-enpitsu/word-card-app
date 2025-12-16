@@ -8,6 +8,7 @@
 
   <!-- Ocean 共通テーマCSS -->
   <link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
   <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
   <style>
@@ -122,7 +123,7 @@
 
       <!-- ヘッダー -->
       <div class="header">
-        <h1 class="input-quiz-header-title">🌊 英語入力クイズ</h1>
+        <h1 class="input-quiz-header-title"><img th:src="@{/images/flashcard_icon.png}" alt="icon">英語入力クイズ</h1>
         <p class="input-quiz-sub-text">
           表示された日本語の意味に対応する英単語を、キーボードから入力してください。<br />
           大文字・小文字は区別しません。

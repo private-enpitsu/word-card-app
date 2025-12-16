@@ -8,6 +8,7 @@
 
 	<!-- Ocean テーマCSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 	<style>
@@ -83,6 +84,8 @@
 			font-weight: 700;
 			text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
 		}
+		
+
 
 		/* スマホ調整 */
 		@media (max-width: 600px) {
@@ -118,7 +121,7 @@
 
 			<!-- ヘッダー -->
 			<div class="header">
-				<h1>🌊 英単語4択クイズ</h1>
+				<h1><img th:src="@{/images/flashcard_icon.png}" alt="icon">英単語4択クイズ</h1>
 <!--				<p class="login-header-sub" th:if="${loginUser != null}">-->
 <!--					ログイン中：<span th:text="${loginUser.name}">User Name</span>-->
 <!--				</p>-->
