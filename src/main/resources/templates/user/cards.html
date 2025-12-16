@@ -39,16 +39,16 @@
 			</div>
 
 			<!-- 説明文 -->
-			<p style="margin-bottom: 20px; color: #444; font-size: 0.95rem; text-align: center;">
-				ランダムに表示される英単語を暗記するページです。<br />
-				「めくる」ボタンで日本語が表示され、「次へ」で別の単語に進みます。
-			</p>
+<!--			<p style="margin-bottom: 20px; color: #444; font-size: 0.95rem; text-align: center;">-->
+<!--				ランダムに表示される英単語を暗記するページです。<br />-->
+<!--				「めくる」ボタンで日本語が表示され、「次へ」で別の単語に進みます。-->
+<!--			</p>-->
 
 			<!-- カード本体（Ocean の question-section を流用） -->
 			<div class="question-section">
 				<div>
 					<!-- 英単語（常に表示） -->
-					<p style="color: #666; margin-bottom: 8px;">英単語</p>
+<!--					<p style="color: #666; margin-bottom: 8px;">英単語</p>-->
 					<p id="question-word" class="question-text" th:text="${cardWord.english}">example</p>
 					
 					<button type="button" onclick="speakElement('#question-word')"
@@ -63,7 +63,7 @@
 
 					<!-- 日本語（初期状態は非表示／めくるボタンで表示） -->
 					<div id="answerArea" style="margin-top: 34px; display: none;">
-						<p style="color: #666; margin-bottom: 4px;">日本語</p>
+<!--						<p style="color: #666; margin-bottom: 4px;">日本語</p>-->
 						<p style="font-size: 22px; color: #01579b; margin: 0;" th:text="${cardWord.japanese}">
 							例
 						</p>
@@ -75,7 +75,7 @@
 			<div class="quiz-next-wrapper" style="display: flex; gap: 12px; margin-top: 0;">
 				<!-- めくる（答えを表示） -->
 				<button id="revealButton" type="button" class="quiz-next-button" style="width: 50%;">
-					めくる
+					答え
 				</button>
 
 				<!-- 次へ：常に表示（新しい単語へ） -->
