@@ -3,67 +3,67 @@
 
 <head>
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>英単語クイズ</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}">
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 </head>
 
 <body>
 
-	
-	  <!--
+
+	<!--
 	    ユーザー共通ヘッダー（ログイン後画面用）
 	    - ログイン中ユーザー名の表示
 	    - 画面上部のナビゲーションメニュー
 	    - デザインは Ocean テーマに合わせた、シンプルな水平メニュー
 	    - スマホでは横幅が足りなくなったら自然に折り返す（ハンバーガー無し）
 	  -->
-	  
 
-	  <div th:fragment="userHeader">
-		
+
+	<div th:fragment="userHeader">
+
 		<style>
-		div .user-header {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-items: center;
-			gap: 8px 16px;
-			padding: 18px 27px;
-	/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */
-			font-size: 0.9rem;
-			position: absolute;
-			width: 100%;
-			min-height: 94px;
-		}
+			div .user-header {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-items: center;
+				gap: 8px 16px;
+				padding: 18px 27px;
+				/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */
+				font-size: 0.9rem;
+				position: absolute;
+				width: 100%;
+				min-height: 94px;
+			}
 		</style>
 
-	    <div class="user-header"><!--header-->
-	      <div style="display: flex; flex-direction: column; gap: 4px;">
-	        <span>
-				<a th:href="@{/}"  style="color: #fff; font-size: 1.3rem; text-decoration: none;">
-	          		FLASHCARD
-			  	</a>
-	        </span>
-	      </div>
+		<div class="user-header"><!--header-->
+			<div style="display: flex; flex-direction: column; gap: 4px;">
+				<span>
+					<a th:href="@{/}" style="color: #fff; font-size: 1.3rem; text-decoration: none;">
+						FLASHCARD
+					</a>
+				</span>
+			</div>
 
-	      <nav><!-- 右側：ナビゲーションメニュー -->
-	      </nav>
-	    </div>
-	  </div>
+			<nav><!-- 右側：ナビゲーションメニュー -->
+			</nav>
+		</div>
+	</div>
 
-	  
-	  
+
+
 	<div class="content-wrap"><!--content-wrap-->
 		<div class="quiz-container">
 			<!-- ヘッダー（タイトルなど） -->
 			<div class="header">
-				<h1>🌊 英単語クイズ</h1>
-				<p>次の英単語の意味として正しいものを1つ選んでください。</p>
+				<h1><img th:src="@{/images/free_icon60.png}" alt="icon">英単語クイズ</h1>
+<!--				<p>次の英単語の意味として正しいものを1つ選んでください。</p>-->
 			</div>
 
 			<!-- プログレスバー（現時点では見た目のみ） -->
@@ -74,8 +74,19 @@
 			<!-- 問題文表示エリア -->
 			<div class="question-section">
 				<p class="question-text">
-					「<span th:text="${questionWord.english}">today</span>」の意味は？
+					<span id="question-word" th:text="${questionWord.english}">today</span>
 				</p>
+
+				<button type="button" onclick="speakElement('#question-word')" style="width: 7%;
+				    		border: none;
+				    		background-color: transparent;
+							position: absolute;
+							right: 18px;
+							bottom: 11px;">
+					<span><img class="onsei-img" th:src="@{/images/icon_onsei_1.png}" style="width: 100%;"></span>
+				</button>
+
+
 			</div>
 
 			<!-- ★ 正解の日本語（JS 判定用） -->
@@ -137,9 +148,9 @@
 					});
 
 					if (selected === correctJapanese) {
-						
+
 						playCorrectSound();   // 正解音
-						
+
 						// ★ 正解をクリックした場合：
 						//   - クリックしたボタンを正解色にする
 						//   - 1.5秒後に次の問題へ（/quiz へ遷移）
@@ -150,9 +161,9 @@
 							window.location.href = "/quiz";
 						}, 1500);
 					} else {
-						
+
 						playWrongSound();     // 不正解音
-						
+
 						// ★ 不正解をクリックした場合：
 						//   - クリックしたボタンを不正解色に
 						//   - 正解のボタンを正解色に
@@ -180,9 +191,46 @@
 				});
 			});
 		});
+
+
+		{
+			// tts.js
+			// 指定したセレクタの要素内テキストを読み上げる関数
+
+			function speakElement(selector) {
+				// ブラウザが TTS に対応しているかチェック
+				if (!('speechSynthesis' in window)) {
+					alert('このブラウザは読み上げに対応していません');
+					return;
+				}
+
+				const el = document.querySelector(selector);
+				if (!el) {
+					console.warn('要素が見つかりません: ' + selector);
+					return;
+				}
+
+				// タグの中の文字だけを取得（HTMLタグは除外）
+				const text = el.textContent.trim();
+				if (!text) {
+					console.warn('読み上げるテキストがありません');
+					return;
+				}
+
+				// 前の読み上げが残っていたら止める
+				speechSynthesis.cancel();
+
+				const utterance = new SpeechSynthesisUtterance(text);
+				utterance.lang = 'en-US'; // 英語
+				utterance.rate = 0.9;     // 速度（お好みで調整可）
+
+				speechSynthesis.speak(utterance);
+			}
+		}
+
 	</script>
-	
-	
+
+
 	<!-- クイズ正誤音 -->
 	<audio id="correctSound" th:src="@{/sounds/correct.mp3}"></audio>
 	<audio id="wrongSound" th:src="@{/sounds/wrong.mp3}"></audio>
