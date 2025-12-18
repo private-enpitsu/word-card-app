@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### ●● railway対応用 ●● ###
+### サーバー情報をGitで更新しない ###
+#application.properties
+*.properties
