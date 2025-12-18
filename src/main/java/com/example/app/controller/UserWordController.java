@@ -66,8 +66,8 @@ public class UserWordController {
 			return "redirect:/login/user";
 		}
 		
-        // 1ページあたりの表示件数（管理者用と合わせて 50 件／ページ）
-        int pageSize = 50;
+        // 1ページあたりの表示件数（管理者用と合わせて 10 件／ページ）
+        int pageSize = 10;
 
         // キーワード条件での総件数を取得（keyword が null/空なら全件数）
         int totalCount = wordService.countByKeyword(keyword);

@@ -76,7 +76,7 @@ public class AdminWordController {
 	    model.addAttribute("loginAdmin", loginAdmin);
 		
 		// 1ページあたりの表示件数（必要に応じて変更可）
-		int pageSize = 50;
+		int pageSize = 10;
 		
 		// キーワード条件での総件数を取得（keyword が空なら全件数）
 		int totalCount = wordService.countByKeyword(keyword);

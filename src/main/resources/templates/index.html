@@ -8,6 +8,7 @@
 
 	<!-- Ocean 共通テーマCSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 	<!-- index 専用のレイアウト微調整 -->
@@ -129,7 +130,7 @@
 		<div class="quiz-container">
 			<!-- タイトル -->
 			<div class="header">
-				<h1>🌊 FLASHCARD</h1>
+				<h1><img th:src="@{/images/flashcard_icon.png}" alt="icon">FLASHCARD</h1>
 				<p class="top-subtitle">
 <!--					英単語クイズと単語カードで、少しずつ語彙を増やしていくためのアプリです。-->
 				</p>
@@ -137,12 +138,12 @@
 
 			<!-- ログインなしでクイズを遊ぶ -->
 			<div class="top-section">
-				<h2>おためし英単語クイズ</h2>
+				<h2>おためし</h2>
 <!--				<p>-->
 <!--					登録なし・ログイン不要で、すぐに英単語4択クイズを始められます。-->
 <!--				</p>-->
 				<a th:href="@{/quiz}" class="menu-link-button">
-					クイズを始める
+					英単語クイズ
 				</a>
 			</div>
 
