@@ -144,7 +144,7 @@ public class UserInputQuizController {
             model.addAttribute("isCorrect", true);
         } else {
             // 不正解の場合のメッセージ（正解の英単語も表示）
-            String message = "不正解です。正解：" + questionWord.getEnglish();
+            String message = "不正解です。" + " - - " + "答え：" + questionWord.getEnglish();
             model.addAttribute("resultMessage", message);
             model.addAttribute("isCorrect", false);
         }
