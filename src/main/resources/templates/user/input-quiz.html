@@ -2,278 +2,414 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>スペリング</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>スペリング</title>
 
-  <!-- Ocean 共通テーマCSS -->
-  <link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
-  <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+	<!-- Ocean 共通テーマCSS -->
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
-  <style>
-    /* 入力クイズ画面専用の軽い調整用スタイル */
+	<style>
+		/* 入力クイズ画面専用の軽い調整用スタイル */
 
-    .input-quiz-header-title {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
+		.input-quiz-header-title {
+			font-size: 1.4rem;
+			margin-bottom: 8px;
+		}
 
-    .input-quiz-sub-text {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+		.input-quiz-sub-text {
+			font-size: 0.95rem;
+			color: #555;
+			margin-bottom: 20px;
+			text-align: center;
+		}
 
-    /* 入力フォームエリア */
-    .input-quiz-form {
-      margin-top: 20px;
-    }
+		/* 入力フォームエリア */
+		.input-quiz-form {
+			margin-top: 20px;
+		}
 
-    .input-quiz-label {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 10px;
-      display: block;
-    }
+		.input-quiz-label {
+			font-size: 0.95rem;
+			color: #555;
+			margin-bottom: 10px;
+			display: block;
+		}
 
-    .input-quiz-textbox {
-      width: 100%;
-      padding: 13px 15px;
-      border-radius: 10px;
-      border: 1px solid #bde6ff;
-      font-size: 1.3rem;
-      box-sizing: border-box;
-    }
+		.input-quiz-textbox {
+			width: 100%;
+			padding: 13px 15px;
+			border-radius: 10px;
+			border: 1px solid #bde6ff;
+			font-size: 1.3rem;
+			box-sizing: border-box;
+		}
 
-    .input-quiz-textbox:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(33, 147, 176, 0.3);
-      border-color: #4fc3f7;
-    }
+		.input-quiz-textbox:focus {
+			outline: none;
+			box-shadow: 0 0 0 2px rgba(33, 147, 176, 0.3);
+			border-color: #4fc3f7;
+		}
 
-    .input-quiz-submit-wrap {
-      margin-top: 32px;
-      text-align: right;
-    }
+		.input-quiz-submit-wrap {
+			margin-top: 32px;
+			text-align: right;
+		}
 
-    .input-quiz-submit-button {
-      min-width: 140px;
-    }
+		.input-quiz-submit-button {
+			min-width: 140px;
+		}
 
-    /* メッセージ表示用ボックス */
-    .input-quiz-message {
-      margin-top: 20px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-    }
+		/* メッセージ表示用ボックス */
+		.input-quiz-message {
+			margin-top: 20px;
+			padding: 12px 14px;
+			border-radius: 10px;
+			font-size: 0.95rem;
+		}
 
-    .input-quiz-message.error {
-      background: #ffebee;
-      border: 1px solid #ffcdd2;
-      color: #c62828;
-    }
+		.input-quiz-message.error {
+			background: #ffebee;
+			border: 1px solid #ffcdd2;
+			color: #c62828;
+		}
 
-    .input-quiz-message.correct {
-      background: #e0f2f1;
-      border: 1px solid #80cbc4;
-      color: #00695c;
-      font-weight: 600;
-    }
+		.input-quiz-message.correct {
+			background: #e0f2f1;
+			border: 1px solid #80cbc4;
+			color: #00695c;
+			font-weight: 600;
+		}
 
-    .input-quiz-message.wrong {
-      background: #fff3e0;
-      border: 1px solid #ffcc80;
-      color: #e65100;
-    }
+		.input-quiz-message.wrong {
+			background: #fff3e0;
+			border: 1px solid #ffcc80;
+			color: #e65100;
+		}
 
-    .input-quiz-next-wrap {
-      margin-top: 46px;
-      text-align: center;
-    }
+		.input-quiz-message.notice {
+			background: #3eb7be;
+			border: 1px solid #3eb7be;
+			color: #ffffff;
+			margin-bottom: 20px;
+			text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.4);
+		}
 
-    .input-quiz-next-button {
-      min-width: 180px;
-    }
+		.input-quiz-next-wrap {
+			margin-top: 46px;
+			text-align: center;
+		}
 
-    /* スマホ調整 */
-    @media (max-width: 600px) {
-      .quiz-container {
-        padding: 24px;
-        margin: 0 10px;
-      }
+		.input-quiz-next-button {
+			min-width: 180px;
+		}
 
-      .input-quiz-header-title {
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+		/* スマホ調整 */
+		@media (max-width: 600px) {
+			.quiz-container {
+				padding: 24px;
+				margin: 0 10px;
+			}
+
+			.input-quiz-header-title {
+				font-size: 1.2rem;
+			}
+		}
+	</style>
 </head>
 
 <body>
 
-  <!-- 共通ユーザーヘッダー（ナビゲーション） -->
-  <div th:replace="~{fragments/user-header :: userHeader}"></div>
+	<!-- 共通ユーザーヘッダー（ナビゲーション） -->
+	<div th:replace="~{fragments/user-header :: userHeader}"></div>
 
-  <div class="content-wrap"><!-- content-wrap -->
+	<div class="content-wrap"><!-- content-wrap -->
 
-    <div class="quiz-container">
+		<div class="quiz-container">
 
-      <!-- ヘッダー -->
-      <div class="header">
-        <h1 class="input-quiz-header-title"><img th:src="@{/images/flashcard_icon.png}" alt="icon">スペリング</h1>
-        <p class="input-quiz-sub-text">
-          表示された日本語の意味に対応する英単語を、キーボードから入力してください。<br />
-          大文字・小文字は区別しません。
-        </p>
-      </div>
+			<!-- ヘッダー -->
+			<div class="header">
+				<h1 class="input-quiz-header-title"><img th:src="@{/images/flashcard_icon.png}" alt="icon">スペリング</h1>
+				<p class="input-quiz-sub-text">
+					表示された日本語の意味に対応する英単語を、キーボードから入力してください。<br />
+					大文字・小文字は区別しません。
+				</p>
+			</div>
 
-      <!-- プログレスバー（見た目の統一用・中身はダミーでOK） -->
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
-      </div>
+			<!-- プログレスバー（見た目の統一用・中身はダミーでOK） -->
+			<div class="progress-bar">
+				<div class="progress-fill"></div>
+			</div>
 
-      <!-- 問題文エリア -->
-      <div class="question-section">
-        <!-- 日本語の出題文 -->
-<!--        <p style="color: #666; margin-bottom: 6px;">日本語の意味</p>-->
-        <p class="question-text"
-           th:text="${questionWord != null} ? ${questionWord.japanese} : '日本語の意味がここに表示されます'">
-          サンプルの日本語
-        </p>
-      </div>
+			<!-- 問題文エリア -->
+			<div class="question-section">
+				<!-- 日本語の出題文 -->
+				<!--        <p style="color: #666; margin-bottom: 6px;">日本語の意味</p>-->
+				<p class="question-text"
+					th:text="${questionWord != null} ? ${questionWord.japanese} : '日本語の意味がここに表示されます'">
+					サンプルの日本語
+				</p>
+			</div>
 
-      <!-- エラーメッセージ（空入力など） -->
-      <div th:if="${errorMessage != null}"
-           class="input-quiz-message error"
-           th:text="${errorMessage}">
-        英単語を入力してください。
-      </div>
+			<!-- エラーメッセージ（空入力など） -->
+			<div th:if="${errorMessage != null}" class="input-quiz-message error" th:text="${errorMessage}">
+				英単語を入力してください。
+			</div>
 
-      <!-- 正解・不正解の判定メッセージ -->
-      <div th:if="${resultMessage != null}">
-        <!-- 正解時 -->
-        <div th:if="${isCorrect}"
-             class="input-quiz-message correct"
-             th:text="${resultMessage}">
-          正解です！
-        </div>
+			<!-- 正解・不正解の判定メッセージ -->
+			<div th:if="${resultMessage != null}">
+				<!-- 正解時 -->
+				<div th:if="${isCorrect}" class="input-quiz-message correct" th:text="${resultMessage}">
+					正解です！
+				</div>
 
-        <!-- 不正解時（isCorrect が false の場合） -->
-        <div th:if="${isCorrect == false}"
-             class="input-quiz-message wrong"
-             th:text="${resultMessage}">
-          不正解です。答え：example
-        </div>
-      </div>
+				<!-- 不正解時（isCorrect が false の場合） -->
+				<div th:if="${isCorrect == false}" class="input-quiz-message wrong" th:text="${resultMessage}">
+					不正解です。答え：example
+				</div>
+			</div>
 
-      <!-- 入力フォーム -->
-      <form th:action="@{/user/input-quiz}" method="post" class="input-quiz-form">
-        <!-- 出題に使用した単語のID（判定用） -->
-        <input type="hidden" name="wordId"
-               th:value="${wordId}" />
+			<!-- 入力フォーム -->
+			<form th:action="@{/user/input-quiz}" method="post" class="input-quiz-form">
+				<!-- 出題に使用した単語のID（判定用） -->
+				<input type="hidden" name="wordId" th:value="${wordId}" />
 
-        <!-- 英単語の入力欄 -->
-        <label for="answer" class="input-quiz-label">英単語を入力してください</label>
-        <input id="answer"
-               name="answer"
-               type="text"
-               class="input-quiz-textbox"
-               autocomplete="off"
-               placeholder="例）example"
-               th:value="${userAnswer}" />
-
-	   <!-- 正解の英単語（音の判定用にクライアント側でも参照する） -->
-	   <input type="hidden" id="correctEnglish" th:value="${questionWord.english}" />
-			   
-        <!-- 送信ボタン -->
-        <div class="input-quiz-submit-wrap">
-          <button type="submit"
-                  class="quiz-next-button input-quiz-submit-button">
-            答え合わせ
-          </button>
-        </div>
-		
-
-		<!-- 判定結果を JS から参照するための hidden -->
-		<input type="hidden" id="quizResult"    th:value="${resultMessage}" />
-		<input type="hidden" id="quizIsCorrect" th:value="${isCorrect}" />
-      </form>
-
-      <!-- 次の問題へ（GET /user/input-quiz に戻る） -->
-      <div class="input-quiz-next-wrap">
-        <a th:href="@{/user/input-quiz}"
-           class="quiz-next-button input-quiz-next-button">
-          次の問題へ
-        </a>
-      </div>
-
-    </div><!-- /.quiz-container -->
-
-  </div><!-- /.content-wrap -->
-
-  <script>
-    // 入力クイズ用：答え合わせボタン（フォーム送信）時に音を鳴らす処理
-    document.addEventListener("DOMContentLoaded", function () {
-      // ★ フォームは class で取得する（th:action の実URLに依存しない）
-      const form = document.querySelector(".input-quiz-form");
-      const answerInput = document.getElementById("answer");
-      const correctInput = document.getElementById("correctEnglish");
-
-      if (!form || !answerInput || !correctInput) {
-        return; // 要素がなければ何もしない
-      }
-
-      form.addEventListener("submit", function (event) {
-        // ★ まずは送信を一度止める（このままだと即リロードされて音が切られる）
-        event.preventDefault();
-
-        // ユーザー入力と正解を同じルールで正規化して比較する
-        const normalize = (src) => {
-          if (!src) return "";
-          // 全角スペース → 半角スペース
-          let replaced = src.replace(/\u3000/g, " ");
-          // 前後の空白を削除
-          replaced = replaced.trim();
-          // 大文字・小文字を区別しないために小文字化
-          return replaced.toLowerCase();
-        };
-
-        const user = normalize(answerInput.value);
-        const correct = normalize(correctInput.value);
-
-        // 空入力の場合は音を鳴らさず、そのまま送信（サーバ側で「入力してください」表示）
-        if (!user) {
-          form.submit();
-          return;
-        }
-
-        // 正解・不正解に応じて音を鳴らす
-        if (user === correct) {
-          if (typeof playCorrectSound === "function") {
-            playCorrectSound();
-          }
-        } else {
-          if (typeof playWrongSound === "function") {
-            playWrongSound();
-          }
-        }
-
-        // ★ 少し待ってからフォーム送信（音を鳴らす時間を確保）
-        setTimeout(function () {
-          form.submit();
-        }, 800); // 0.6秒くらい（好みで調整可）
-      });
-    });
-  </script>
+				<!-- 英単語の入力欄 -->
+				<label for="answer" class="input-quiz-label">英単語を入力してください</label>
+				
+				<!-- 入力中の全角チェック用メッセージ（JSで表示/非表示を切り替える） -->
+				<div id="zenkakuNotice" class="input-quiz-message notice" style="display:none">全角文字が含まれています。半角で入力してください。
+				</div>
+				<input id="answer" name="answer" type="text" class="input-quiz-textbox" autocomplete="off"
+					placeholder="例）example" th:value="${userAnswer}" />
 
 
-  
-  <audio id="correctSound" th:src="@{/sounds/correct.mp3}"></audio>
-  <audio id="wrongSound"   th:src="@{/sounds/wrong.mp3}"></audio>
-  <script th:src="@{/js/quiz-sound.js}"></script>
+
+				<!-- 正解の英単語（音の判定用にクライアント側でも参照する） -->
+				<input type="hidden" id="correctEnglish" th:value="${questionWord.english}" />
+
+				<!-- 送信ボタン -->
+				<div class="input-quiz-submit-wrap">
+					<!--
+			            JSで正誤判定を完結させるため、submit はしない。
+			            EnterキーもJSで「答え合わせ」として扱う（下の script 参照）。
+			          -->
+					<button type="button" id="checkButton" class="quiz-next-button input-quiz-submit-button">
+						答え合わせ
+					</button>
+				</div>
+
+
+				<!-- 判定結果を JS から参照するための hidden -->
+				<input type="hidden" id="quizResult" th:value="${resultMessage}" />
+				<input type="hidden" id="quizIsCorrect" th:value="${isCorrect}" />
+			</form>
+
+
+			<div class="input-quiz-next-wrap">
+				<!--
+				          「次へ」で Java に回答を送る（受け取るだけ。保存は今回はしない）
+				          送信後は Java 側で /user/input-quiz にリダイレクトして次の問題を表示する。
+				        -->
+				<form th:action="@{/user/input-quiz/next}" method="post" id="nextForm" style="display:none;">
+					<input type="hidden" name="wordId" th:value="${wordId}">
+					<input type="hidden" name="answer" id="nextAnswer">
+					<button type="submit" class="quiz-next-button input-quiz-next-button">
+						次の問題へ
+					</button>
+				</form>
+			</div>
+
+		</div><!-- /.quiz-container -->
+
+	</div><!-- /.content-wrap -->
+
+	<script>
+		// 入力クイズ用：
+		// - 入力中：全角が含まれたら注意メッセージを表示
+		// - 答え合わせ：JSで正誤判定まで完結（画面表示＋効果音）
+		// - 答え合わせ後：入力欄を編集不可にし、「次の問題へ（POST）」を表示
+		document.addEventListener("DOMContentLoaded", function () {
+
+			const form = document.querySelector(".input-quiz-form");
+			const answerInput = document.getElementById("answer");
+			const correctInput = document.getElementById("correctEnglish");
+
+			const zenkakuNotice = document.getElementById("zenkakuNotice");
+			const checkButton = document.getElementById("checkButton");
+
+			const nextForm = document.getElementById("nextForm");
+			const nextAnswer = document.getElementById("nextAnswer");
+
+			// 既存の hidden（サーバ判定が残っていても壊さないために保持）
+			const quizResult = document.getElementById("quizResult");
+			const quizIsCorrect = document.getElementById("quizIsCorrect");
+
+			if (!form || !answerInput || !correctInput || !checkButton || !nextForm || !nextAnswer) {
+				return;
+			}
+
+			// -----------------------------
+			// 入力中の全角チェック（注意表示）
+			// -----------------------------
+			// 全角スペース（U+3000）＋ 全角ASCII互換（U+FF01〜U+FF5E：全角英数記号など）を検知
+			const hasFullWidth = (src) => {
+				if (!src) return false;
+				return /[^\x20-\x7E]/.test(src);
+			};
+
+			const updateZenkakuNotice = () => {
+				if (!zenkakuNotice) return;
+				if (hasFullWidth(answerInput.value)) {
+					zenkakuNotice.style.display = "block";
+				} else {
+					zenkakuNotice.style.display = "none";
+				}
+			};
+
+			answerInput.addEventListener("input", updateZenkakuNotice);
+			updateZenkakuNotice(); // 初期値（th:value）にも対応
+
+			// -----------------------------
+			// JS正誤判定で使う正規化
+			// -----------------------------
+			const normalizeForCompare = (src) => {
+				if (!src) return "";
+
+				// 1) Unicode正規化（NFKC）
+				let s = src.normalize("NFKC");
+
+				// 2) 全角スペース → 半角スペース
+				s = s.replace(/\u3000/g, " ");
+
+				// 3) 前後trim（単語の前後の空白だけ削る）
+				s = s.trim();
+
+				// 4) 連続スペースは1つ扱い（タブ等も含めて空白を1つに圧縮）
+				s = s.replace(/\s+/g, " ");
+
+				// 5) 大文字小文字無視
+				s = s.toLowerCase();
+
+				return s;
+			};
+
+			// -----------------------------
+			// 画面内メッセージ表示（既存の style を流用）
+			// -----------------------------
+			// 既存テンプレはサーバ側の resultMessage を出す構造なので、
+			// JS用に表示枠を動的に用意して、そこへ表示する。
+			const ensureClientMessageBox = () => {
+				let box = document.getElementById("clientMessageBox");
+				if (box) return box;
+
+				box = document.createElement("div");
+				box.id = "clientMessageBox";
+				// 既存メッセージの表示位置に合わせる（フォームの直前に置く）
+				form.parentNode.insertBefore(box, form);
+				return box;
+			};
+
+			const showClientMessage = (type, text) => {
+				// type: "error" | "correct" | "wrong"
+				const box = ensureClientMessageBox();
+				box.innerHTML = "";
+
+				const div = document.createElement("div");
+				div.className = "input-quiz-message " + type;
+				div.textContent = text;
+
+				box.appendChild(div);
+			};
+
+			// -----------------------------
+			// 答え合わせ（JSで完結）
+			// -----------------------------
+			const lockAfterChecked = () => {
+				// 答え合わせ後は入力を固定
+				answerInput.disabled = true;
+				checkButton.disabled = true;
+
+				// 「次へ（POST）」を表示し、送信値を確定
+				nextAnswer.value = answerInput.value;
+				nextForm.style.display = "block";
+			};
+
+			const checkAnswer = () => {
+				const userRaw = answerInput.value;
+				const correctRaw = correctInput.value;
+
+				const user = normalizeForCompare(userRaw);
+				const correct = normalizeForCompare(correctRaw);
+
+				// 空入力（実質空）ならエラー表示（サーバへ送らず、画面で完結）
+				if (!user) {
+					showClientMessage("error", "英単語を入力してください。");
+					return;
+				}
+
+				// 正誤判定
+				const isCorrect = (user === correct);
+
+				// 既存hiddenにも格納（将来の拡張や互換のため）
+				if (quizResult) {
+					quizResult.value = isCorrect ? "正解です！" : ("不正解です。 - - 答え：" + correctRaw);
+				}
+				if (quizIsCorrect) {
+					quizIsCorrect.value = String(isCorrect);
+				}
+
+				// 画面表示＋効果音
+				if (isCorrect) {
+					showClientMessage("correct", "正解です！");
+					if (typeof playCorrectSound === "function") {
+						playCorrectSound();
+					}
+				} else {
+					showClientMessage("wrong", "不正解です。 - - 答え：" + correctRaw);
+					if (typeof playWrongSound === "function") {
+						playWrongSound();
+					}
+				}
+
+				lockAfterChecked();
+			};
+
+			// ボタンクリックで答え合わせ
+			checkButton.addEventListener("click", function () {
+				checkAnswer();
+			});
+
+			// Enterキーでも答え合わせにする（フォームsubmitはさせない）
+			form.addEventListener("submit", function (event) {
+				event.preventDefault();
+			});
+
+			answerInput.addEventListener("keydown", function (event) {
+				if (event.key === "Enter") {
+					event.preventDefault();
+					if (!checkButton.disabled) {
+						checkAnswer();
+					}
+				}
+			});
+
+			// サーバ側で結果表示して戻ってきた場合の互換：
+			// resultMessage がある状態なら、入力を固定して「次へ（POST）」を出す。
+			if (quizResult && quizResult.value && quizResult.value.trim() !== "") {
+				lockAfterChecked();
+			}
+		});
+	</script>
+
+
+
+
+	<audio id="correctSound" th:src="@{/sounds/correct.mp3}"></audio>
+	<audio id="wrongSound" th:src="@{/sounds/wrong.mp3}"></audio>
+	<script th:src="@{/js/quiz-sound.js}"></script>
 </body>
 
 </html>

@@ -155,6 +155,44 @@ public class UserInputQuizController {
         return "user/input-quiz";
     }
 
+    
+    /**
+     * 「次の問題へ」押下時に、回答をJava側で受け取る（保存は今回はしない）。
+     *
+     * 仕様：
+     * - 画面上の正誤判定は JavaScript で完結
+     * - 次へ進むタイミングで、回答（wordId + answer）だけを受け取る
+     * - 受け取ったら次の問題（GET /user/input-quiz）へリダイレクト
+     *
+     * @param session HTTPセッション（ログインユーザー確認用）
+     * @param wordId  出題に使用した Word のID
+     * @param answer  ユーザーの入力値（答え合わせ後に固定されたもの）
+     * @return 次の問題表示へリダイレクト
+     */
+    @PostMapping("/user/input-quiz/next")
+    public String receiveAnswerAndNext(
+    		HttpSession session,
+    		@RequestParam("wordId") Long wordId,
+    		@RequestParam("answer") String answer
+    		) {
+    	
+    	// セッションからログイン中ユーザーを取得
+    	UserAccount loginUser = (UserAccount) session.getAttribute("loginUser");
+    	
+    	if(loginUser == null) {
+    		return "redirect:/login/user";
+    	}
+    	
+    	// 今回は回答を「受け取るだけ」なので、ここでは何もしない。
+        // （将来：Java側で再判定や保存、他ゲームとの統合をここに追加していく想定）
+        // wordId / answer の値はこの時点で受領できている。
+    	return "redirect:/user/input-quiz";
+    }
+    
+    
+    
+    
+    
     /**
      * 英単語のユーザー入力と正解を比較するための正規化関数。
      *
