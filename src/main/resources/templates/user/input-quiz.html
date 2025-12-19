@@ -328,14 +328,21 @@
 			// 答え合わせ（JSで完結）
 			// -----------------------------
 			const lockAfterChecked = () => {
-				// 答え合わせ後は入力を固定
-				answerInput.disabled = true;
-				checkButton.disabled = true;
+			  // 答え合わせ後は入力を固定
+			  answerInput.disabled = true;
+			  checkButton.disabled = true;
 
-				// 「次へ（POST）」を表示し、送信値を確定
-				nextAnswer.value = answerInput.value;
-				nextForm.style.display = "block";
+			  // 「次へ（POST）」を表示し、送信値を確定
+			  nextAnswer.value = answerInput.value;
+			  nextForm.style.display = "block";
+
+			  // ★ 次へボタンにフォーカスを移す（Enterで次へ、を自然に実現）
+			  const nextBtn = nextForm.querySelector('button[type="submit"]');
+			  if (nextBtn) {
+			    nextBtn.focus();
+			  }
 			};
+
 
 			const checkAnswer = () => {
 				const userRaw = answerInput.value;
@@ -399,8 +406,15 @@
 			// サーバ側で結果表示して戻ってきた場合の互換：
 			// resultMessage がある状態なら、入力を固定して「次へ（POST）」を出す。
 			if (quizResult && quizResult.value && quizResult.value.trim() !== "") {
-				lockAfterChecked();
+			  lockAfterChecked();
+			} else {
+			  // ★ 新しい問題の初期表示時は、入力欄にフォーカス（カーソルを置く）
+			  // すでに disabled なら触らない（将来の拡張・安全策）
+			  if (!answerInput.disabled) {
+			    answerInput.focus();
+			  }
 			}
+
 		});
 	</script>
 
