@@ -34,6 +34,6 @@ build/
 
 
 ### ●● railway対応用 ●● ###
-### サーバー情報をGitで更新しない ###
-#application.properties
-#*.properties
+### application.propertiesを、GitHub上では更新しない ###
+# 変更の追跡を一時的に停止 を実施
+# git update-index --assume-unchanged <ファイル名>
