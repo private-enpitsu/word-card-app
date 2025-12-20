@@ -329,19 +329,35 @@
 			// 答え合わせ（JSで完結）
 			// -----------------------------
 			const lockAfterChecked = () => {
-			  // 答え合わせ後は入力を固定
+			  // 
+			  // 入力欄を操作不能にします（編集できない状態）。
+			  // 「答え合わせ後に回答が変わる」事故を防ぎます。
 			  answerInput.disabled = true;
+			  // 答え合わせボタンも押せなくします。
+			  // 連打で状態が壊れたり、二重処理になるのを防ぎます。
 			  checkButton.disabled = true;
 
-			  // 「次へ（POST）」を表示し、送信値を確定
+			  // 次へPOSTフォームにある hidden input（id="nextAnswer"）に、
+			  // 確定した回答文字列をセットします。
+			  // これにより「次へ」押下時にJavaへ送る answer が、答え合わせ時点の値になります。
 			  nextAnswer.value = answerInput.value;
+			  // 最初は display:none で隠していた「次へフォーム」を表示します。
+			  // つまり、答え合わせ前は「次へ」を見せず、答え合わせ後にだけ見せる、というUI制御です。
 			  nextForm.style.display = "block";
 
 			  // ★ 次へボタンにフォーカスを移す（Enterで次へ、を自然に実現）
+			  // nextForm の中から、送信用ボタン（type="submit"）を探します。
+			  // 今回は「次の問題へ」ボタンがそれに当たります
 			  const nextBtn = nextForm.querySelector('button[type="submit"]');
 			  if (nextBtn) {
 			    nextBtn.focus();
 			  }
+			  // ボタンが見つかったら、そこにキーボードフォーカスを当てます。
+			  // これをやると、ブラウザ標準の挙動として
+			  // Enterキー＝フォーカス中ボタンの押下（submit）
+			  // になり、追加のキーイベント処理を書かなくても「Enterで次へ」が実現できます。
+			  // その結果として、ボタンに枠線（フォーカスリング）が出ます。
+			  
 			};
 
 
