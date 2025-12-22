@@ -8,6 +8,7 @@
 
 	<!-- Ocean テーマ共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 	<style>
@@ -239,7 +240,7 @@
 		@media (max-width: 600px) {
 			.quiz-container {
 				padding: 20px;
-				margin: 0 8px;
+				margin: 120px 8px 10px 8px;
 			}
 
 			.header h1 {
@@ -273,8 +274,8 @@
 				font-size: 0.85rem;
 			}
 		}
-		
-		
+
+
 		/* 微修正 */
 		.content-wrap {
 			height: initial;
@@ -295,9 +296,9 @@
 				<p class="header-sub">
 					登録されている英単語を一覧で確認できます。キーワード検索も可能です。
 				</p>
-<!--				<p class="home-link">-->
-<!--					<a th:href="@{/user/home}">ユーザーHOMEへ戻る</a>-->
-<!--				</p>-->
+				<!--				<p class="home-link">-->
+				<!--					<a th:href="@{/user/home}">ユーザーHOMEへ戻る</a>-->
+				<!--				</p>-->
 			</div>
 
 			<!-- 検索フォーム -->
@@ -417,6 +418,7 @@
 
 		</div>
 	</div><!--content-wrap-->
+	<script th:src="@{/js/hamburger.js}"></script>
 </body>
 
 </html>

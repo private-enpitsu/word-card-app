@@ -8,6 +8,7 @@
 
 	<!-- Ocean テーマ共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 	<style>
@@ -127,75 +128,6 @@
 
 
 
-<!--	<div th:fragment="userHeader">-->
-
-<!--		<style>-->
-<!--			div .user-header {-->
-<!--				display: flex;-->
-<!--				flex-wrap: wrap;-->
-<!--				justify-content: space-between;-->
-<!--				align-items: center;-->
-<!--				gap: 8px 16px;-->
-<!--				padding: 18px 27px;-->
-<!--				/* 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12); */-->
-<!--				font-size: 0.9rem;-->
-<!--				position: absolute;-->
-<!--				width: 100%;-->
-<!--				min-height: 94px;-->
-<!--			}-->
-<!--		</style>-->
-
-<!--		<div class="user-header">-->
-<!--			 左側：アプリ名＋ログイン中ユーザー名 -->
-<!--			<div style="display: flex; flex-direction: column; gap: 4px;">-->
-<!--				<a th:href="@{/user/home}" style="text-decoration: none;">-->
-<!--					<span style="color: #fff; font-size: 1.3rem;">-->
-<!--						FLASHCARD-->
-<!--					</span>-->
-<!--				</a>-->
-
-<!--			</div>-->
-
-<!--			 右側：ナビゲーションメニュー -->
-<!--			<nav>-->
-<!--				<ul style="-->
-<!--	            display: flex;-->
-<!--	            flex-wrap: wrap;-->
-<!--	            gap: 6px;-->
-<!--	            list-style: none;-->
-<!--	            padding: 0;-->
-<!--	            margin: 0;-->
-<!--	          ">-->
-
-<!--					 ログアウト -->
-<!--					<li>-->
-<!--						<a th:href="@{/logout}" style="-->
-<!--	                display: inline-block;-->
-<!--	                padding: 6px 10px;-->
-<!--	                border-radius: 999px;-->
-<!--	                text-decoration: none;-->
-<!--					color: #fff;-->
-<!--					font-weight: 500;-->
-<!--	              ">-->
-<!--							ログアウト-->
-<!--						</a>-->
-<!--					</li>-->
-<!--				</ul>-->
-
-<!--				<div>-->
-<!--					 loginUser は既存画面でも使用されている前提 -->
-<!--					<span th:if="${loginUser != null}" style="position: absolute;-->
-<!--				right: 37px;-->
-<!--				bottom: 0;-->
-<!--				font-weight: 500;-->
-<!--				color: #e0f7ff;">-->
-<!--						<span th:text="${loginUser.name}">User Name</span> さん-->
-<!--					</span>-->
-<!--				</div>-->
-<!--			</nav>-->
-
-<!--		</div>-->
-<!--	</div>-->
 	
 	
 	<!-- 共通ユーザーヘッダー（ナビゲーション） -->
@@ -261,7 +193,7 @@
 			</div>
 		</div>
 	</div>
-
+	<script th:src="@{/js/hamburger.js}"></script>
 </body>
 
 </html>

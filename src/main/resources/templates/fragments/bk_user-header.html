@@ -36,12 +36,7 @@
 
 
 		</div>
-<!--		<div>-->
-<!--			 loginUser は既存画面でも使用されている前提 -->
-<!--			<span th:if="${loginUser != null}" style="color: #e0f7ff;">-->
-<!--				<span th:text="${loginUser.name}">User Name</span> さん-->
-<!--			</span>-->
-<!--		</div>-->
+
 		<div id="navArea">
 
 <!--			<nav>-->
@@ -60,19 +55,40 @@
 					
 					<div class="inner">
 						
-					<ul >
+					<ul style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          ">
 
 
 						<!-- クイズ -->
 						<li>
-							<a th:href="@{/user/quiz}">
+							<a th:href="@{/user/quiz}" style="
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                text-decoration: none;
+				color: #fff;
+				font-weight: 500;
+              ">
 								英単語クイズ
 							</a>
 						</li>
 
 						<!-- 英単語カード（単語暗記） -->
 						<li>
-							<a th:href="@{/user/cards}">
+							<a th:href="@{/user/cards}" style="
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                text-decoration: none;
+				color: #fff;
+				font-weight: 500;
+              ">
 								暗記カード
 							</a>
 						</li>
@@ -80,20 +96,43 @@
 						<!-- 単語一覧 -->
 						<!-- 英語入力クイズ -->
 						<li>
-							<a th:href="@{/user/input-quiz}">
+							<a th:href="@{/user/input-quiz}" style="
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                text-decoration: none;
+				color: #fff;
+				font-weight: 500;
+              ">
 								スペリング
 							</a>
 						</li>
 
 						<!-- ログアウト -->
 						<li>
-							<a th:href="@{/logout}">
+							<a th:href="@{/logout}" style="
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                text-decoration: none;
+				color: #fff;
+				font-weight: 500;
+              ">
 								ログアウト
 							</a>
 						</li>
 					</ul>
 
-
+					<div>
+						<!-- loginUser は既存画面でも使用されている前提 -->
+						<span th:if="${loginUser != null}" style="position: absolute;
+			right: 37px;
+			bottom: 0;
+			font-weight: 500;
+			color: #e0f7ff;">
+							<span th:text="${loginUser.name}">User Name</span> さん
+						</span>
+					</div>
 					
 					
 					</div>

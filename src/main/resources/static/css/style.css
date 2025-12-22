@@ -5,8 +5,157 @@
 	display: flex;
 	justify-content: center;
 }
+
 .header img {
 	width: 39px;
 	display: block;
 	margin-right: 7px;
+}
+
+
+
+
+
+/*ハンバーガーメニュー*/
+
+/*============
+nav
+=============*/
+nav {
+	display: block;
+	position: fixed;
+	top: 0;
+	right: -155px;
+	bottom: 0;
+	width: 155px;
+	/*  background: #ffffff;*/
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	transition: all .5s;
+	z-index: 3;
+	opacity: 0;
+}
+
+.open nav {
+	right: 0;
+	opacity: 1;
+}
+
+nav .inner {
+	padding: 25px;
+	margin-top: 55px;
+}
+
+nav .inner ul {
+	list-style: none;
+	text-align: right;
+	margin: 0;
+	padding: 0;
+}
+
+nav .inner ul li {
+	position: relative;
+	margin: 0;
+	border-bottom: 1px solid #fff;
+}
+
+nav .inner ul li a {
+	display: block;
+	color: #fff;
+	font-size: 14px;
+	padding: 1em 1em 1em 0;
+	text-decoration: none;
+	transition-duration: 0.2s;
+}
+
+nav .inner ul li a:hover {
+	background: #e4e4e4;
+}
+
+@media screen and (max-width: 767px) {
+	nav {
+		right: -155px;
+		width: 155px;
+	}
+}
+
+/*============
+.toggle_btn
+=============*/
+.toggle_btn {
+	display: block;
+	position: fixed;
+	top: 30px;
+	right: 30px;
+	width: 30px;
+	height: 30px;
+	transition: all .5s;
+	cursor: pointer;
+	z-index: 3;
+}
+
+.toggle_btn span {
+	display: block;
+	position: absolute;
+	left: 0;
+	width: 30px;
+	height: 2px;
+	background-color: #fff;
+	border-radius: 4px;
+	transition: all .5s;
+}
+
+.toggle_btn span:nth-child(1) {
+	top: 4px;
+}
+
+.toggle_btn span:nth-child(2) {
+	top: 14px;
+}
+
+.toggle_btn span:nth-child(3) {
+	bottom: 4px;
+}
+
+.open .toggle_btn span {
+	background-color: #fff;
+}
+
+.open .toggle_btn span:nth-child(1) {
+	-webkit-transform: translateY(10px) rotate(-315deg);
+	transform: translateY(10px) rotate(-315deg);
+}
+
+.open .toggle_btn span:nth-child(2) {
+	opacity: 0;
+}
+
+.open .toggle_btn span:nth-child(3) {
+	-webkit-transform: translateY(-10px) rotate(315deg);
+	transform: translateY(-10px) rotate(315deg);
+}
+
+/*============
+#mask
+=============*/
+#mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;          /* 背景色 */
+  opacity: 0;                /* 最初は透明 */
+  visibility: hidden;        /* 見えない（アニメ可） */
+  pointer-events: none;      /* クリック不可 */
+  transition: opacity .5s, visibility .5s;  /* 0.5秒で変化 */
+  z-index: 2;
+}
+
+.open #mask {
+  opacity: .8;               /* 0.8まで暗くする（0.5秒で変化） */
+  visibility: visible;
+  pointer-events: auto;      /* クリック可能にする */
+  cursor: pointer;
 }
