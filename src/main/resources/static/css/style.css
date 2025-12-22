@@ -104,7 +104,7 @@ nav .inner ul li.logout-link a:hover {
 	
 	nav .inner ul li a {
 	    font-size: 14px;
-	    padding: 10px 17px 10px 0;
+		padding: 15px 17px 15px 0;
 
 	}
 	nav .inner ul li.logout-link {
@@ -112,7 +112,7 @@ nav .inner ul li.logout-link a:hover {
 		border-radius: 15px;
 	}
 	nav .inner ul li.logout-link a {
-		margin-top: 14px;
+		margin-top: 19px;
 	}
 	
 }
