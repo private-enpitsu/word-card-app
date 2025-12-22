@@ -25,9 +25,9 @@ nav {
 	display: block;
 	position: fixed;
 	top: 0;
-	right: -155px;
+	right: -161px;
 	bottom: 0;
-	width: 155px;
+	width: 161px;
 	/*  background: #ffffff;*/
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -64,7 +64,7 @@ nav .inner ul li a {
 	display: block;
 	color: #fff;
 	font-size: 14px;
-	padding: 1em 1em 1em 1em;
+	padding: 10px 17px 10px 0;
 	text-decoration: none;
 	transition-duration: 0.2s;
 }
@@ -98,8 +98,8 @@ nav .inner ul li.logout-link a:hover {
 
 @media screen and (max-width: 767px) {
 	nav {
-		right: -155px;
-		width: 155px;
+/*		right: -161px;*/
+/*		width: 161px;*/
 	}
 }
 
