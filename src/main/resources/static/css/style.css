@@ -25,9 +25,9 @@ nav {
 	display: block;
 	position: fixed;
 	top: 0;
-	right: -161px;
+	right: -200px;
 	bottom: 0;
-	width: 161px;
+	width: 200px;
 	/*  background: #ffffff;*/
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -63,8 +63,8 @@ nav .inner ul li {
 nav .inner ul li a {
 	display: block;
 	color: #fff;
-	font-size: 14px;
-	padding: 10px 17px 10px 0;
+	font-size: 18px;
+	padding: 24px 17px 24px 0;
 	text-decoration: none;
 	transition-duration: 0.2s;
 }
@@ -79,15 +79,15 @@ nav .inner ul li.logout-link {
 	border-bottom: none;
 	background-color: #fff;
 	opacity: 0.8;
-	width: 90px;
-	border-radius: 15px;
+	width: 100px;
+	border-radius: 20px;
 	margin-left: auto;
 }
 
 nav .inner ul li.logout-link a {
 	opacity: 0.8;
 	color: #000;
-	margin-top: 20px;
+	margin-top: 27px;
 	padding: 7px 1px 7px 1px;
 	text-align: center;
 }
@@ -98,9 +98,23 @@ nav .inner ul li.logout-link a:hover {
 
 @media screen and (max-width: 767px) {
 	nav {
-/*		right: -161px;*/
-/*		width: 161px;*/
+		right: -161px;
+		width: 161px;
 	}
+	
+	nav .inner ul li a {
+	    font-size: 14px;
+	    padding: 10px 17px 10px 0;
+
+	}
+	nav .inner ul li.logout-link {
+		width: 90px;
+		border-radius: 15px;
+	}
+	nav .inner ul li.logout-link a {
+		margin-top: 14px;
+	}
+	
 }
 
 /*============
