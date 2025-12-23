@@ -392,7 +392,7 @@
 						playCorrectSound();
 					}
 				} else {
-					showClientMessage("wrong", "不正解です。 - - 答え：" + correctRaw);
+					showClientMessage("wrong", "不正解です。" + " - - - " + "● 答え ： " + correctRaw);
 					if (typeof playWrongSound === "function") {
 						playWrongSound();
 					}

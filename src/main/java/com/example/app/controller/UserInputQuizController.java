@@ -91,6 +91,9 @@ public class UserInputQuizController {
      * @param answer  ユーザーの入力値（テキストボックスから送信）
      * @return user/input-quiz テンプレート名
      */
+    
+//  ●●●JavaScriptで処理するよう変更したので、このPostは使いません。
+//  ●苦手単語一覧を作る時に、別のPostを作ります。
     @PostMapping("/user/input-quiz")
     public String checkInputQuiz(
             HttpSession session,
@@ -144,9 +147,12 @@ public class UserInputQuizController {
             model.addAttribute("isCorrect", true);
         } else {
             // 不正解の場合のメッセージ（正解の英単語も表示）
-            String message = "不正解です。" + " - - " + "答え：" + questionWord.getEnglish();
+            String message = "不正解です。" + " - - - " + "● 答え ： " + questionWord.getEnglish();
             model.addAttribute("resultMessage", message);
             model.addAttribute("isCorrect", false);
+            
+            System.out.println("model x=" + "resultMessage");
+            
         }
 
         // ※「次の問題へ」ボタンはテンプレート側で
