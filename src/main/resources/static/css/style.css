@@ -71,7 +71,7 @@ nav .inner ul li a {
 
 nav .inner ul li a:hover {
 	background: #e4e4e4;
-	color: #000;
+	color: #C9A333;
 }
 
 
@@ -202,4 +202,63 @@ nav .inner ul li.logout-link a:hover {
 	pointer-events: auto;
 	/* クリック可能にする */
 	cursor: pointer;
+}
+
+
+
+@media screen and (min-width: 768px) {
+
+  /* PC表示：ヘッダー内で横並びにして常時表示 */
+  #navArea {
+    display: flex;
+    align-items: center;
+  }
+
+  nav {
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    opacity: 1;
+    overflow: visible;
+    transition: none;
+    z-index: auto;
+  }
+
+  nav .inner {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  nav .inner ul {
+    display: flex;
+    gap: 0 16px;
+    text-align: left;
+  }
+
+  nav .inner ul li {
+    border-bottom: none;
+    margin: 0;
+  }
+
+  nav .inner ul li a {
+	text-align: center;
+	padding: 15px 13px 15px 13px;;
+  }
+
+  /* PCではハンバーガーとマスクを出さない */
+  .toggle_btn {
+    display: none;
+  }
+
+  #mask {
+    display: none;
+  }
+  
+/*  PC表示で、非表示のメニュー用*/
+  .pc-hide {
+  	display: none;
+  }
+  
 }

@@ -56,62 +56,112 @@
 
 			<!-- ナビゲーションメニュー -->
 			<div id="navArea">
-				<nav>
-					
-					<div class="inner">
-						
-					<ul >
-						
-						<!-- クイズ -->
-						<li>
-							<a th:href="@{/user/home}">
-								HOME
-							</a>
-						</li>
-						
-						<!-- クイズ -->
-						<li>
-							<a th:href="@{/user/quiz}">
-								英単語クイズ
-							</a>
-						</li>
 
-						<!-- 英単語カード（単語暗記） -->
-						<li>
-							<a th:href="@{/user/cards}">
-								暗記カード
-							</a>
-						</li>
+			  <nav>
+			    <div class="inner">
+			      <ul>
 
-						<!-- 単語一覧 -->
-						<!-- 英語入力クイズ -->
-						<li>
-							<a th:href="@{/user/input-quiz}">
-								スペリング
-							</a>
-						</li>
+			        <li class="pc-hide">
+			          <a th:href="@{/user/home}">
+			            HOME
+			          </a>
+			        </li>
 
-						<!-- ログアウト -->
-						<li class="logout-link">
-							<a th:href="@{/logout}">
-								ログアウト
-							</a>
-						</li>
-					</ul>
-					</div>
-				</nav>
+			        <li>
+			          <a th:href="@{/user/quiz}">
+			            英単語クイズ
+			          </a>
+			        </li>
 
+			        <li>
+			          <a th:href="@{/user/cards}">
+			            暗記カード
+			          </a>
+			        </li>
 
+			        <li>
+			          <a th:href="@{/user/input-quiz}">
+			            スペリング
+			          </a>
+			        </li>
 
-				<div class="toggle_btn">
-					<span></span>
-					<span></span>
-					<span></span>
-				</div>
+			        <li class="logout-link pc-hide">
+			          <a th:href="@{/logout}">
+			            ログアウト
+			          </a>
+			        </li>
 
-				<div id="mask"></div>
+			      </ul>
+			    </div>
+			  </nav>
+
+			  <div class="toggle_btn">
+			    <span></span>
+			    <span></span>
+			    <span></span>
+			  </div>
+
+			  <div id="mask"></div>
 
 			</div>
+
+<!--			<div id="navArea">-->
+<!--				<nav>-->
+					
+<!--					<div class="inner">-->
+						
+<!--					<ul >-->
+						
+<!--						 クイズ -->
+<!--						<li>-->
+<!--							<a th:href="@{/user/home}">-->
+<!--								HOME-->
+<!--							</a>-->
+<!--						</li>-->
+						
+<!--						 クイズ -->
+<!--						<li>-->
+<!--							<a th:href="@{/user/quiz}">-->
+<!--								英単語クイズ-->
+<!--							</a>-->
+<!--						</li>-->
+
+<!--						 英単語カード（単語暗記） -->
+<!--						<li>-->
+<!--							<a th:href="@{/user/cards}">-->
+<!--								暗記カード-->
+<!--							</a>-->
+<!--						</li>-->
+
+<!--						 単語一覧 -->
+<!--						 英語入力クイズ -->
+<!--						<li>-->
+<!--							<a th:href="@{/user/input-quiz}">-->
+<!--								スペリング-->
+<!--							</a>-->
+<!--						</li>-->
+
+<!--						 ログアウト -->
+<!--						<li class="logout-link">-->
+<!--							<a th:href="@{/logout}">-->
+<!--								ログアウト-->
+<!--							</a>-->
+<!--						</li>-->
+<!--					</ul>-->
+<!--					</div>-->
+<!--				</nav>-->
+
+
+
+<!--				<div class="toggle_btn">-->
+<!--					<span></span>-->
+<!--					<span></span>-->
+<!--					<span></span>-->
+<!--				</div>-->
+
+<!--				<div id="mask"></div>-->
+
+<!--			</div>-->
 
 
 
