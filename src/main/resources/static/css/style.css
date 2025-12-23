@@ -71,7 +71,8 @@ nav .inner ul li a {
 
 nav .inner ul li a:hover {
 	background: #e4e4e4;
-	color: #C9A333;
+/*	color: #C9A333;*/
+	color: #2193b0;
 }
 
 
