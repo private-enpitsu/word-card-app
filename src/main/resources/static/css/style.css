@@ -71,7 +71,7 @@ nav .inner ul li a {
 
 nav .inner ul li a:hover {
 	background: #e4e4e4;
-/*	color: #C9A333;*/
+	/*	color: #C9A333;*/
 	color: #2193b0;
 }
 
@@ -102,20 +102,22 @@ nav .inner ul li.logout-link a:hover {
 		right: -161px;
 		width: 161px;
 	}
-	
+
 	nav .inner ul li a {
-	    font-size: 14px;
+		font-size: 14px;
 		padding: 15px 17px 15px 0;
 
 	}
+
 	nav .inner ul li.logout-link {
 		width: 90px;
 		border-radius: 15px;
 	}
+
 	nav .inner ul li.logout-link a {
 		margin-top: 19px;
 	}
-	
+
 }
 
 /*============
@@ -209,57 +211,89 @@ nav .inner ul li.logout-link a:hover {
 
 @media screen and (min-width: 768px) {
 
-  /* PC表示：ヘッダー内で横並びにして常時表示 */
-  #navArea {
-    display: flex;
-    align-items: center;
-  }
+	/* PC表示：ヘッダー内で横並びにして常時表示 */
+	#navArea {
+		display: flex;
+		align-items: center;
+	}
 
-  nav {
-    position: static;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    width: auto;
-    opacity: 1;
-    overflow: visible;
-    transition: none;
-    z-index: auto;
-  }
+	nav {
+		position: static;
+		top: auto;
+		right: auto;
+		bottom: auto;
+		width: auto;
+		opacity: 1;
+		overflow: visible;
+		transition: none;
+		z-index: auto;
+	}
 
-  nav .inner {
-    padding: 0;
-    margin-top: 0;
-  }
+	nav .inner {
+		padding: 0;
+		margin-top: 0;
+	}
 
-  nav .inner ul {
-    display: flex;
-    gap: 0 16px;
-    text-align: left;
-  }
+	nav .inner ul {
+		display: flex;
+		gap: 0 16px;
+		text-align: left;
+	}
 
-  nav .inner ul li {
-    border-bottom: none;
-    margin: 0;
-  }
+	nav .inner ul li {
+		border-bottom: none;
+		margin: 0;
+	}
 
-  nav .inner ul li a {
-	text-align: center;
-	padding: 15px 13px 15px 13px;;
-  }
+	nav .inner ul li a {
+		text-align: center;
+		padding: 15px 13px 15px 13px;
+		;
+	}
 
-  /* PCではハンバーガーとマスクを出さない */
-  .toggle_btn {
-    display: none;
-  }
+	/*  ログアウトボタン*/
+	nav .inner ul li.logout-link {
+		border-bottom: none;
+		background-color: inherit;
+		opacity: 1;
+		width: 100px;
+		/*    border-radius: 20px;*/
+		/*    margin-left: auto;*/
+	}
 
-  #mask {
-    display: none;
-  }
-  
-/*  PC表示で、非表示のメニュー用*/
-  .pc-hide {
-  	display: none;
-  }
-  
+	nav .inner ul li.logout-link a {
+		/*      border-bottom: none;*/
+		/*      background-color: #fff;*/
+		opacity: 1;
+		/*      width: 100px;*/
+		/*      border-radius: 20px;*/
+		/*      margin-left: auto;*/
+		text-align: center;
+		padding: 15px 13px 15px 13px;
+		margin-top: 0;
+		color: #fff;
+	}
+
+
+	/* PCではハンバーガーとマスクを出さない */
+	.toggle_btn {
+		display: none;
+	}
+
+	#mask {
+		display: none;
+	}
+
+	/*  PC表示で、非表示のメニュー用*/
+	.pc-hide {
+		display: none;
+	}
+
+
+
+
+	/*  各ページ微調整*/
+	.quiz-container {
+		margin-bottom: 150px;
+	}
 }
