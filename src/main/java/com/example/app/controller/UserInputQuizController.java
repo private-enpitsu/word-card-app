@@ -94,74 +94,74 @@ public class UserInputQuizController {
     
 //  ●●●JavaScriptで処理するよう変更したので、このPostは使いません。
 //  ●苦手単語一覧を作る時に、別のPostを作ります。
-    @PostMapping("/user/input-quiz")
-    public String checkInputQuiz(
-            HttpSession session,
-            Model model,
-            @RequestParam("wordId") Long wordId,
-            @RequestParam("answer") String answer) {
-
-        // セッションからログイン中ユーザーを取得
-        UserAccount loginUser = (UserAccount) session.getAttribute("loginUser");
-        if (loginUser == null) {
-            // 未ログインならユーザー用ログイン画面へリダイレクト
-            return "redirect:/login/user";
-        }
-        model.addAttribute("loginUser", loginUser);
-
-        // 判定対象となる正解の単語を取得
-        Word questionWord = wordService.findById(wordId);
-
-        // 万一、id に対応するレコードが見つからなかった場合
-        if (questionWord == null) {
-            // システム的な異常に近いので、簡易メッセージ＋新規問題出題への誘導
-            model.addAttribute("errorMessage", "問題の単語が取得できませんでした。もう一度お試しください。");
-            return "redirect:/user/input-quiz";
-        }
-
-        // 画面側で再表示するために、問題の日本語と wordId を積む
-        model.addAttribute("questionWord", questionWord);
-        model.addAttribute("wordId", questionWord.getId());
-
-        // ユーザー入力値は、後で再表示できるようにそのまま Model にも保持しておく
-        model.addAttribute("userAnswer", answer);
-
-        // ==== 入力チェック（空文字かどうか） ====
-        String normalizedInput = normalizeForCompare(answer);
-
-        if (normalizedInput.isEmpty()) {
-            // 入力が実質的に空（空文字 or 空白のみ）の場合は、まず入力を促す
-            model.addAttribute("errorMessage", "英単語を入力してください。");
-            // 正解・不正解の判定結果はまだ出していないので resultMessage は設定しない
-            return "user/input-quiz";
-        }
-
-        // ==== 正解の英単語も同様に正規化して比較 ====
-        String normalizedCorrect = normalizeForCompare(questionWord.getEnglish());
-
-        boolean isCorrect = normalizedInput.equals(normalizedCorrect);
-
-        if (isCorrect) {
-            // 正解の場合のメッセージ
-            model.addAttribute("resultMessage", "正解です！");
-            model.addAttribute("isCorrect", true);
-        } else {
-            // 不正解の場合のメッセージ（正解の英単語も表示）
-            String message = "不正解です。" + " - - - " + "● 答え ： " + questionWord.getEnglish();
-            model.addAttribute("resultMessage", message);
-            model.addAttribute("isCorrect", false);
-            
-            System.out.println("model x=" + "resultMessage");
-            
-        }
-
-        // ※「次の問題へ」ボタンはテンプレート側で
-        //    <a th:href="@{/user/input-quiz}">次の問題へ</a>
-        // などとして GET に飛ばす想定。
-        return "user/input-quiz";
-    }
-
-    
+//    @PostMapping("/user/input-quiz")
+//    public String checkInputQuiz(
+//            HttpSession session,
+//            Model model,
+//            @RequestParam("wordId") Long wordId,
+//            @RequestParam("answer") String answer) {
+//
+//        // セッションからログイン中ユーザーを取得
+//        UserAccount loginUser = (UserAccount) session.getAttribute("loginUser");
+//        if (loginUser == null) {
+//            // 未ログインならユーザー用ログイン画面へリダイレクト
+//            return "redirect:/login/user";
+//        }
+//        model.addAttribute("loginUser", loginUser);
+//
+//        // 判定対象となる正解の単語を取得
+//        Word questionWord = wordService.findById(wordId);
+//
+//        // 万一、id に対応するレコードが見つからなかった場合
+//        if (questionWord == null) {
+//            // システム的な異常に近いので、簡易メッセージ＋新規問題出題への誘導
+//            model.addAttribute("errorMessage", "問題の単語が取得できませんでした。もう一度お試しください。");
+//            return "redirect:/user/input-quiz";
+//        }
+//
+//        // 画面側で再表示するために、問題の日本語と wordId を積む
+//        model.addAttribute("questionWord", questionWord);
+//        model.addAttribute("wordId", questionWord.getId());
+//
+//        // ユーザー入力値は、後で再表示できるようにそのまま Model にも保持しておく
+//        model.addAttribute("userAnswer", answer);
+//
+//        // ==== 入力チェック（空文字かどうか） ====
+//        String normalizedInput = normalizeForCompare(answer);
+//
+//        if (normalizedInput.isEmpty()) {
+//            // 入力が実質的に空（空文字 or 空白のみ）の場合は、まず入力を促す
+//            model.addAttribute("errorMessage", "英単語を入力してください。");
+//            // 正解・不正解の判定結果はまだ出していないので resultMessage は設定しない
+//            return "user/input-quiz";
+//        }
+//
+//        // ==== 正解の英単語も同様に正規化して比較 ====
+//        String normalizedCorrect = normalizeForCompare(questionWord.getEnglish());
+//
+//        boolean isCorrect = normalizedInput.equals(normalizedCorrect);
+//
+//        if (isCorrect) {
+//            // 正解の場合のメッセージ
+//            model.addAttribute("resultMessage", "正解です！");
+//            model.addAttribute("isCorrect", true);
+//        } else {
+//            // 不正解の場合のメッセージ（正解の英単語も表示）
+//            String message = "不正解です。" + " - - - " + "● 答え ： " + questionWord.getEnglish();
+//            model.addAttribute("resultMessage", message);
+//            model.addAttribute("isCorrect", false);
+//            
+//            System.out.println("model x=" + "resultMessage");
+//            
+//        }
+//
+//        // ※「次の問題へ」ボタンはテンプレート側で
+//        //    <a th:href="@{/user/input-quiz}">次の問題へ</a>
+//        // などとして GET に飛ばす想定。
+//        return "user/input-quiz";
+//    }
+//
+//    
     /**
      * 「次の問題へ」押下時に、回答をJava側で受け取る（保存は今回はしない）。
      *
