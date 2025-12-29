@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>FLASHCARD - トップ</title>
+
+	<!-- Ocean 共通テーマCSS -->
+	<link rel="stylesheet" th:href="@{/css/ocean-theme.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+
+	<!-- index 専用のレイアウト微調整 -->
+	<style>
+		.top-subtitle {
+			color: #444;
+			font-size: 0.95rem;
+			margin-top: 8px;
+		}
+
+		.top-section {
+			background: rgba(255, 255, 255, 0.95);
+			border-radius: 16px;
+			padding: 40px 30px;
+			margin-top: 16px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+			text-align: center;
+		}
+
+		.top-section h2 {
+			font-size: 1.1rem;
+			margin-bottom: 20px;
+			color: #01579b;
+		}
+
+		.top-section p {
+			font-size: 0.9rem;
+			color: #555;
+			margin-bottom: 12px;
+		}
+
+		.menu-link-button {
+			display: inline-block;
+			width: 60%;
+			text-align: center;
+			padding: 14px 16px;
+			border-radius: 12px;
+			border: 2px solid #b3e5fc;
+			background: #e0f7ff;
+			color: #0288d1;
+			font-weight: 500;
+			font-size: 0.95rem;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-sizing: border-box;
+		}
+
+		.menu-link-button:hover {
+			background: #e1f5fe;
+			border-color: #4fc3f7;
+			color: #01579b;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(33, 147, 176, 0.3);
+		}
+
+		.menu-link-list {
+			list-style: none;
+			padding-left: 0;
+			width: 60%;
+			    margin: 0 auto;
+		}
+
+		.menu-link-list li+li {
+			margin-top: 8px;
+		}
+
+		.menu-link-text {
+			display: block;
+			padding: 12px 10px;
+			border-radius: 8px;
+			text-decoration: none;
+			color: #01579b;
+			background: #f5fbff;
+			border: 1px solid #d0ecff;
+			font-size: 1.15rem;
+			transition: background 0.2s ease, transform 0.1s ease;
+		}
+
+		.menu-link-text:hover {
+			background: #e0f4ff;
+			transform: translateY(-1px);
+		}
+
+		.quiz-container {
+			margin: 0;
+		}
+		
+		/* スマホ向けの微調整 */
+		@media (max-width: 600px) {
+			.quiz-container {
+				padding: 24px;
+				margin: 0 10px;
+			}
+
+			.header h1 {
+				font-size: 22px;
+			}
+
+			.top-section {
+				padding: 16px;
+			}
+
+			.menu-link-button {
+				font-size: 0.9rem;
+				padding: 10px 12px;
+			}
+
+			.menu-link-text {
+				font-size: 0.9rem;
+				padding: 8px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="content-wrap"><!--content-wrap-->
+		<div class="quiz-container">
+			<!-- タイトル -->
+			<div class="header">
+				<h1><img th:src="@{/images/flashcard_icon.png}" alt="icon">FLASHCARD</h1>
+				<p class="top-subtitle">
+<!--					英単語クイズと単語カードで、少しずつ語彙を増やしていくためのアプリです。-->
+				</p>
+			</div>
+
+			<!-- ログインなしでクイズを遊ぶ -->
+			<div class="top-section">
+				<h2>おためし</h2>
+<!--				<p>-->
+<!--					登録なし・ログイン不要で、すぐに英単語4択クイズを始められます。-->
+<!--				</p>-->
+				<a th:href="@{/quiz}" class="menu-link-button">
+					英単語クイズ
+				</a>
+			</div>
+
+			<!-- ユーザーメニュー -->
+			<div class="top-section">
+				<h2>ユーザーメニュー</h2>
+<!--				<p>ログインすると、単語カードやマイページが利用できるようになります。</p>-->
+				<ul class="menu-link-list">
+					<li>
+						<a th:href="@{/login/user}" class="menu-link-text">
+							ユーザーログイン
+						</a>
+					</li>
+					<li>
+						<a th:href="@{/user/register}" class="menu-link-text">
+							ユーザー登録
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- 管理者メニュー -->
+<!--			<div class="top-section">-->
+<!--				<h2>管理者メニュー</h2>-->
+<!--				<p>単語データの登録や編集を行う。</p>-->
+<!--				<ul class="menu-link-list">-->
+<!--					<li>-->
+<!--						<a th:href="@{/login/admin}" class="menu-link-text">-->
+<!--							管理者ログイン-->
+<!--						</a>-->
+<!--					</li>-->
+<!--					<li>-->
+<!--						<a th:href="@{/admin/register}" class="menu-link-text">-->
+<!--							管理者登録-->
+<!--						</a>-->
+<!--					</li>-->
+<!--				</ul>-->
+<!--			</div>-->
+		</div>
+	</div><!--content-wrap-->
+</body>
+
+</html>
